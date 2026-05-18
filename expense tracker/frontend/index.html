@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        /* Auth Pages */
+        .auth-page {
+            padding: 40px;
+            display: none;
+        }
+
+        .auth-page.active {
+            display: block;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            margin-top: 10px;
+        }
+
+        .toggle-link {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .toggle-link a {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid #c33;
+        }
+
+        .success {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid #3c3;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h1 {
+            font-size: 24px;
+        }
+
+        .dashboard-header button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid white;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .dashboard-header button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dashboard-content {
+            padding: 30px;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .total-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .total-amount {
+            color: #333;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .add-expense-form {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 2px dashed #e0e0e0;
+        }
+
+        .add-expense-form h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .add-expense-form button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            margin-bottom: 0;
+        }
+
+        .expenses-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .expense-list {
+            list-style: none;
+        }
+
+        .expense-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .expense-info h4 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .expense-info p {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .expense-amount {
+            color: #667eea;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .total-amount {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Signup Page -->
+        <div id="signup-page" class="auth-page active">
+            <div class="auth-header">
+                <h1>Create Account</h1>
+                <p>Start tracking your expenses today</p>
+            </div>
+            <div id="signup-error"></div>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-username">Username</label>
+                    <input type="text" id="signup-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" name="confirm" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign Up</button>
+            </form>
+            <div class="toggle-link">
+                Already have an account? <a onclick="showLogin()">Login</a>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login-page" class="auth-page">
+            <div class="auth-header">
+                <h1>Welcome Back</h1>
+                <p>Login to your expense tracker</p>
+            </div>
+            <div id="login-error"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <div class="toggle-link">
+                Don't have an account? <a onclick="showSignup()">Sign Up</a>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h1>Expense Tracker</h1>
+                <button onclick="logout()">Logout</button>
+            </div>
+            <div class="dashboard-content">
+                <div class="total-section">
+                    <div class="total-label">Total Expenses</div>
+                    <div class="total-amount">₹<span id="total-amount">0</span></div>
+                </div>
+
+                <div class="add-expense-form">
+                    <h3>Add New Expense</h3>
+                    <form id="add-expense-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expense-title">Title</label>
+                                <input type="text" id="expense-title" placeholder="e.g., Groceries" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-amount">Amount</label>
+                                <input type="number" id="expense-amount" placeholder="e.g., 500" required min="1">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Add Expense</button>
+                    </form>
+                    <div id="add-expense-error"></div>
+                </div>
+
+                <div class="expenses-section">
+                    <h3>Recent Expenses</h3>
+                    <div id="expenses-container">
+                        <div class="loading">Loading expenses</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let currentUser = null;
+        let authToken = null;
+
+        // Page Navigation
+        function showSignup() {
+            document.getElementById('signup-page').classList.add('active');
+            document.getElementById('login-page').classList.remove('active');
+            document.getElementById('signup-error').innerHTML = '';
+        }
+
+        function showLogin() {
+            document.getElementById('login-page').classList.add('active');
+            document.getElementById('signup-page').classList.remove('active');
+            document.getElementById('login-error').innerHTML = '';
+        }
+
+        function showDashboard() {
+            document.getElementById('signup-page').classList.remove('active');
+            document.getElementById('login-page').classList.remove('active');
+            document.getElementById('dashboard').classList.add('active');
+            loadExpenses();
+        }
+
+        // Signup
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm').value;
+
+            if (password !== confirm) {
+                showError('signup-error', 'Passwords do not match');
+                return;
+            }
+
+            if (password.length < 4) {
+                showError('signup-error', 'Password must be at least 4 characters');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    showError('signup-error', '');
+                    showSuccess('login-page', 'Account created! Please login.');
+                    showLogin();
+                    document.getElementById('signup-form').reset();
+                } else {
+                    const error = await response.json();
+                    showError('signup-error', error.detail || 'Signup failed');
+                }
+            } catch (err) {
+                showError('signup-error', 'Network error: ' + err.message);
+            }
+        });
+
+        // Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const formData = new FormData();
+                formData.append('username', username);
+                formData.append('password', password);
+
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    authToken = data.access_token;
+                    currentUser = username;
+                    localStorage.setItem('token', authToken);
+                    localStorage.setItem('username', username);
+                    showError('login-error', '');
+                    showDashboard();
+                } else {
+                    const error = await response.json();
+                    showError('login-error', error.detail || 'Login failed');
+                }
+            } catch (err) {
+                showError('login-error', 'Network error: ' + err.message);
+            }
+        });
+
+        // Add Expense
+        document.getElementById('add-expense-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('expense-title').value;
+            const amount = parseInt(document.getElementById('expense-amount').value);
+
+            if (!authToken) return;
+
+            try {
+                const response = await fetch(`${API_URL}/expense`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ title, amount })
+                });
+
+                if (response.ok) {
+                    document.getElementById('expense-title').value = '';
+                    document.getElementById('expense-amount').value = '';
+                    document.getElementById('add-expense-error').innerHTML = '';
+                    loadExpenses();
+                } else {
+                    const error = await response.json();
+                    showError('add-expense-error', error.detail || 'Failed to add expense');
+                }
+            } catch (err) {
+                showError('add-expense-error', 'Network error: ' + err.message);
+            }
+        });
+
+        // Load Expenses
+        async function loadExpenses() {
+            if (!authToken || !currentUser) return;
+
+            try {
+                const response = await fetch(`${API_URL}/${currentUser}`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const userData = data.data;
+                    document.getElementById('total-amount').textContent = userData.total;
+
+                    const expenses = userData.expenses;
+                    const container = document.getElementById('expenses-container');
+
+                    if (!expenses || expenses.length === 0) {
+                        container.innerHTML = '<div class="empty-state"><p>No expenses yet. Add your first expense above!</p></div>';
+                        return;
+                    }
+
+                    container.innerHTML = expenses.map((exp, index) => `
+                        <div class="expense-item">
+                            <div class="expense-info">
+                                <h4>${escapeHtml(exp.title)}</h4>
+                            </div>
+                            <div class="expense-amount">₹${exp.amount}</div>
+                        </div>
+                    `).join('');
+                } else if (response.status === 401) {
+                    logout();
+                } else {
+                    document.getElementById('expenses-container').innerHTML = '<div class="error">Failed to load expenses</div>';
+                }
+            } catch (err) {
+                document.getElementById('expenses-container').innerHTML = `<div class="error">Error: ${err.message}</div>`;
+            }
+        }
+
+        // Logout
+        function logout() {
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('signup-page').classList.add('active');
+            document.getElementById('login-form').reset();
+            document.getElementById('signup-form').reset();
+            showSignup();
+        }
+
+        // Utilities
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            if (message) {
+                element.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+            } else {
+                element.innerHTML = '';
+            }
+        }
+
+        function showSuccess(elementId, message) {
+            const element = document.getElementById(elementId);
+            if (message) {
+                element.innerHTML = `<div class="success">${escapeHtml(message)}</div>`;
+            } else {
+                element.innerHTML = '';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Restore session on page load
+        window.addEventListener('load', () => {
+            const savedToken = localStorage.getItem('token');
+            const savedUsername = localStorage.getItem('username');
+            if (savedToken && savedUsername) {
+                authToken = savedToken;
+                currentUser = savedUsername;
+                showDashboard();
+            }
+        });
+
+        // Refresh expenses every 10 seconds when on dashboard
+        setInterval(() => {
+            if (document.getElementById('dashboard').classList.contains('active')) {
+                loadExpenses();
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
