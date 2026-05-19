@@ -1,7 +1,7 @@
 from fastapi import Depends,HTTPException
 from jose import jwt,JWTError
 from passlib.context import CryptContext
-from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm,HTTPAuthorizationCredentials,HTTPBearer
 from datetime import datetime,timedelta,timezone
 import hashlib
 
@@ -17,7 +17,7 @@ pwd_context = CryptContext(schemes=["bcrypt"],deprecated="auto")
 
 #Oauth2
 
-oauth_schema = OAuth2PasswordBearer(tokenUrl="/login")
+oauth_schema = HTTPBearer()
 
 def hashpass(password:str):
     return pwd_context.hash(password)
@@ -35,12 +35,13 @@ def create_token(data:dict):
         token = token.decode('utf-8')
     return token
 
-def verify_tokken(token:str = Depends(oauth_schema)):
+def verify_tokken(token: HTTPAuthorizationCredentials = Depends(oauth_schema)):
     try:
-        payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
-        username :str = payload.get("sub")
-        if username is None:
-            raise HTTPException(status_code=401,detail="no user or token expire")
-        return str(username)
+        token_str = token.credentials
+        payload = jwt.decode(token_str, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise HTTPException(status_code=401, detail="no user or token expire")
+        return str(email)
     except JWTError as e:
-        raise HTTPException(status_code=401,detail=f"unauthorized or invalid token: {str(e)}")
+        raise HTTPException(status_code=401, detail=f"unauthorized or invalid token: {str(e)}")

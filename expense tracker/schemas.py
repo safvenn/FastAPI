@@ -1,11 +1,13 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class Signup(BaseModel):
     username:str
+    email:str
     password:str
 
 class Login(BaseModel):
-    username:str
+    email:str
     password:str
 
 class AddExp(BaseModel):
