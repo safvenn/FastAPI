@@ -36,8 +36,9 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-nav h-20 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+    <div className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8">
+      <nav className={`max-w-7xl mx-auto ios-glass transition-all duration-500 shadow-2xl flex flex-col justify-center px-6 sm:px-8 rounded-[24px] ${mobileMenuOpen ? 'py-4' : 'h-20'}`}>
+        <div className="w-full flex items-center justify-between h-16 shrink-0">
         
         {/* Left Side: Brand Logo */}
         <Link to="/" className="flex items-center gap-2 group">
@@ -215,7 +216,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-brand-surface/95 border-b border-white/5 backdrop-blur-xl"
+            className="md:hidden w-full overflow-hidden mt-2"
           >
             <div className="px-4 pt-2 pb-6 space-y-3 flex flex-col">
               <Link
@@ -250,6 +251,7 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-    </nav>
+      </nav>
+    </div>
   );
 }

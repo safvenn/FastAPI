@@ -30,6 +30,32 @@
   text-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
 }
 
+@utility ios-glass {
+  background-color: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+@utility ios-glass-heavy {
+  background-color: rgba(10, 10, 10, 0.45);
+  backdrop-filter: blur(36px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+}
+
+@utility ios-curve {
+  border-radius: 24px;
+}
+
+@utility ios-curve-lg {
+  border-radius: 32px;
+}
+
+@utility ios-glow {
+  box-shadow: 0 0 40px rgba(57, 255, 20, 0.12);
+}
+
 /* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;

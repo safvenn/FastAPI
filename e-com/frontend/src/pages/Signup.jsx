@@ -28,7 +28,9 @@ export default function Signup() {
 
     const res = await signup(email, username, password);
     if (res.success) {
-      toast.success('Successfully signed up! Please log in with your credentials.');
+      toast.success('Successfully signed up! Please check your inbox to verify your email before logging in.', {
+        duration: 6000,
+      });
       navigate('/login');
     } else {
       toast.error(res.error || 'Signup failed');

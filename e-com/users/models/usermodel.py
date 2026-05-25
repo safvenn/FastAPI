@@ -1,5 +1,5 @@
 from database.db import Base
-from sqlalchemy import Column,Integer,String,ForeignKey,Float
+from sqlalchemy import Column,Integer,String,ForeignKey,Float,Boolean
 from sqlalchemy.orm import Relationship, relationship
 from cart.models.catitemmodel import CartitemModel
 
@@ -10,6 +10,7 @@ class UsersModel(Base):
     username = Column(String,unique=True)
     password = Column(String,nullable=False)
     role = Column(String,nullable=False,default='user')
+    is_verify = Column(Boolean)
 
     cart = relationship('CartitemModel',back_populates='users')
     address = relationship('AddresModel',back_populates='users')

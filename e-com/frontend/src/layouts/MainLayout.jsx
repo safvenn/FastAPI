@@ -12,7 +12,7 @@ export default function MainLayout() {
       <Navbar />
 
       {/* Main Content Area with Page Transitions */}
-      <main className="flex-grow pt-20">
+      <main className="flex-grow pt-28">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}

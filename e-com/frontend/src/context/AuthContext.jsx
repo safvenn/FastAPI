@@ -30,11 +30,21 @@ export function AuthProvider({ children }) {
       checkAdminRole();
     } else {
       localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
       localStorage.removeItem('role');
       setUser(null);
       setRole('user');
     }
   }, [token]);
+
+  // Synchronize token state with Axios background refreshes
+  useEffect(() => {
+    const handleRefreshed = (e) => {
+      setToken(e.detail);
+    };
+    window.addEventListener('token-refreshed', handleRefreshed);
+    return () => window.removeEventListener('token-refreshed', handleRefreshed);
+  }, []);
 
   const login = async (username, password) => {
     setLoading(true);
@@ -47,6 +57,9 @@ export function AuthProvider({ children }) {
       const res = await API.post('/login', params, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
+      if (res.data.refresh_token) {
+        localStorage.setItem('refresh_token', res.data.refresh_token);
+      }
       setToken(res.data.access_token);
       return { success: true };
     } catch (err) {
@@ -79,6 +92,7 @@ export function AuthProvider({ children }) {
     setUser(null);
     setRole('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
     localStorage.removeItem('role');
   };
 

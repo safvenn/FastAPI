@@ -1,9 +1,15 @@
+from auth.auth import verfy_refresh
+from jose import JWTError
+from auth.auth import ALGORITHM
+from auth.auth import SECRET_KEY
+from jose import jwt
+from auth.auth import create_refresh_token
 from unittest import result
 
 from fastapi import FastAPI,Depends,HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 # pyrefly: ignore [missing-import]
-from sqlalchemy import func
+from sqlalchemy import func, or_
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 from database.db import get_db
@@ -24,7 +30,8 @@ from cart.schemas.addtocartschemas import AddtoCart
 from users.schemas.addressschemas import AddressSchema
 from users.schemas.userschema import ProfileSchema
 from dotenv import load_dotenv
-
+from auth.eamil_auth import craete_email_token
+from auth.email import send_email_verf
 Base.metadata.create_all(bind=engine)
 
 
@@ -444,34 +451,87 @@ def addorders(order: OrderSchema,db: Session = Depends(get_db),user: int = Depen
 #login section ---------------------------------------------------------------------------------
 
 @app.post("/signup")
-def signup(signup: SignupModel, db: Session = Depends(get_db)):
-    user = db.query(UsersModel).filter(UsersModel.username == signup.username).first()
+async def signup(signup: SignupModel, db: Session = Depends(get_db)):
+    user = db.query(UsersModel).filter(or_(UsersModel.username == signup.username, UsersModel.email == signup.email)).first()
     if user:
-        raise HTTPException(status_code=400, detail="User already exists")
+        if user.is_verify:
+            raise HTTPException(status_code=400, detail="User already exists")
+        else:
+            db.delete(user)
+            db.commit()
+    token = craete_email_token(str(signup.email),str(signup.password))
+    
+    await send_email_verf(
+        signup.email,
+        token)
+
     passsword = hashpass(signup.password)
     data = UsersModel(
         email = signup.email,
         username = signup.username,
-        password = passsword
+        password = passsword,
+        is_verify = False
     )
     db.add(data)
     db.commit()
     db.refresh(data)
-    return data
+    return {
+        "msg":"email verification email sented"
+    }
 
 
+@app.get("/signup/{token}")
+def verify_email(token:str,db: Session = Depends(get_db)):
+    payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+    email:str = payload.get("sub")
+
+    user = db.query(UsersModel).filter(UsersModel.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404,detail="inavalid user")
+    user.is_verify = True
+
+    
+    db.commit()
+    
+
+    return{
+        "msg":"sucessfully registerd"
+    }
 
 
 @app.post("/login")
 def login(login: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(UsersModel).filter(UsersModel.username == login.username).first()
+    user = db.query(UsersModel).filter(
+        or_(
+            UsersModel.username == login.username,
+            UsersModel.email == login.username
+        )
+    ).first()
 
     if not user or not verify_pass(login.password, user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    if not user.is_verify:
+        raise HTTPException(status_code=403, detail="Email not verified. Please verify your email first.")
     token = create_token({"sub": str(user.id)})
+    refresh_token = create_refresh_token({"sub": str(user.id)})
 
     return {
         "access_token": token,
+        "refresh_token":refresh_token,
         "token_type": "Bearer"
     }
     
+
+
+#refresh token---------------------------------------------------------------------------------------------------------
+
+@app.post("/refresh")
+def refresh(token:str):
+
+    new_token = verfy_refresh(token)
+
+    return {
+            "access_token": new_token,
+            "token_type": "Bearer"
+        }

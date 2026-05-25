@@ -4,6 +4,7 @@ import { FiArrowRight, FiShield, FiTrendingUp, FiCheckCircle } from 'react-icons
 import { useProducts } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
 import { ProductSkeleton } from '../components/LoadingSkeleton';
+import heroSneakerImg from '../assets/hero_sneaker.png';
 
 export default function Home() {
   const { products, loading } = useProducts();
@@ -18,7 +19,7 @@ export default function Home() {
     brand: "Jordan",
     description: "The Travis Scott x Air Jordan 1 Retro High features a backwards Swoosh and a hidden pouch in the collar.",
     price: 950,
-    image_url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff" // default preview
+    image_url: heroSneakerImg
   };
 
   const containerVariants = {
@@ -38,64 +39,94 @@ export default function Home() {
     <div className="pb-20">
       
       {/* 1. Hero Promo Section */}
-      <section className="relative min-h-[85vh] flex items-center bg-radial from-brand-surface-card to-brand-bg border-b border-white/5 overflow-hidden">
+      <section className="relative py-12 px-4 sm:px-6 lg:px-8 overflow-hidden bg-brand-bg">
         
-        {/* Abstract Glowing Aura */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-neon/10 rounded-full blur-[140px] pointer-events-none" />
+        {/* Animated Background Glowing Orbs */}
+        <motion.div
+          animate={{
+            scale: [1, 1.15, 1],
+            x: [0, 30, 0],
+            y: [0, -15, 0],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-10 left-10 w-[350px] h-[350px] bg-brand-neon/10 rounded-full blur-[120px] pointer-events-none"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            x: [0, -25, 0],
+            y: [0, 40, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-brand-neon/5 rounded-full blur-[130px] pointer-events-none"
+        />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto relative z-10 ios-glass ios-curve-lg p-8 sm:p-16 md:p-20 shadow-3xl overflow-hidden">
+          {/* Subtle gradient light flare on card */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-brand-neon/5 via-white/[0.01] to-transparent pointer-events-none" />
           
-          {/* Hero Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="space-y-6 text-left"
-          >
-            <span className="inline-block text-xs font-black tracking-widest text-brand-neon bg-brand-neon/15 px-3.5 py-1.5 rounded-full uppercase">
-              Limited Edition Drop
-            </span>
-            <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tighter leading-[0.95]">
-              STEP INTO <br />
-              <span className="text-gradient">THE FUTURE.</span>
-            </h1>
-            <p className="text-neutral-400 text-sm sm:text-base max-w-md leading-relaxed">
-              Explore our curated selection of authentic streetwear, high-end collabs, and luxury sneaker culture. Validated by collectors, worn by legends.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <Link
-                to="/products"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand-neon text-black font-extrabold text-xs tracking-widest uppercase rounded-full hover:scale-105 hover:neon-glow transition duration-300 cursor-pointer"
-              >
-                Shop Collection <FiArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/products?brand=Jordan"
-                className="inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/10 hover:border-white/20 text-white font-extrabold text-xs tracking-widest uppercase rounded-full hover:bg-white/10 transition duration-300"
-              >
-                Explore Jordans
-              </Link>
-            </div>
-          </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            
+            {/* Hero Left Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+              className="space-y-6 text-left"
+            >
+              <span className="inline-block text-xs font-black tracking-widest text-brand-neon bg-brand-neon/15 px-3.5 py-1.5 rounded-full uppercase">
+                Limited Edition Drop
+              </span>
+              <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tighter leading-[0.95]">
+                STEP INTO <br />
+                <span className="text-gradient">THE FUTURE.</span>
+              </h1>
+              <p className="text-neutral-400 text-sm sm:text-base max-w-md leading-relaxed">
+                Explore our curated selection of authentic streetwear, high-end collabs, and luxury sneaker culture. Validated by collectors, worn by legends.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                <Link
+                  to="/products"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand-neon text-black font-extrabold text-xs tracking-widest uppercase rounded-full hover:scale-105 hover:neon-glow transition duration-300 cursor-pointer"
+                >
+                  Shop Collection <FiArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  to="/products?brand=Jordan"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/10 hover:border-white/20 text-white font-extrabold text-xs tracking-widest uppercase rounded-full hover:bg-white/10 transition duration-300"
+                >
+                  Explore Jordans
+                </Link>
+              </div>
+            </motion.div>
 
-          {/* Hero Right Sneaker Showcase Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
-            animate={{ opacity: 1, scale: 1, rotate: -5 }}
-            transition={{ duration: 1, type: 'spring', stiffness: 50 }}
-            className="relative flex items-center justify-center"
-          >
-            {/* Ambient Shadow glow below shoe */}
-            <div className="absolute bottom-10 w-4/5 h-12 bg-black/60 rounded-full blur-2xl filter transform scale-x-110 rotate-5 pointer-events-none" />
-            <img
-              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-              alt="Jordan Premium Drop"
-              loading="eager"
-              decoding="async"
-              className="max-h-[350px] sm:max-h-[480px] object-contain drop-shadow-[0_20px_50px_rgba(57,255,20,0.15)] filter"
-            />
-          </motion.div>
+            {/* Hero Right Sneaker Showcase Image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
+              animate={{ opacity: 1, scale: 1, rotate: -5 }}
+              transition={{ duration: 1, type: 'spring', stiffness: 50 }}
+              className="relative flex items-center justify-center"
+            >
+              {/* Ambient Shadow glow below shoe */}
+              <div className="absolute bottom-10 w-4/5 h-12 bg-black/60 rounded-full blur-2xl filter transform scale-x-110 rotate-5 pointer-events-none" />
+              <img
+                src={heroSneakerImg}
+                alt="Jordan Premium Drop"
+                loading="eager"
+                decoding="async"
+                className="max-h-[350px] sm:max-h-[480px] object-contain drop-shadow-[0_20px_50px_rgba(57,255,20,0.15)] filter"
+              />
+            </motion.div>
 
+          </div>
         </div>
 
       </section>
@@ -165,10 +196,10 @@ export default function Home() {
       </section>
 
       {/* 4. Brand Value / trust banners */}
-      <section className="py-16 bg-brand-surface border-t border-b border-white/5">
+      <section className="py-16 bg-brand-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
           
-          <div className="flex items-start gap-4 text-left p-4 rounded-xl hover:bg-white/5 transition duration-200">
+          <div className="flex items-start gap-5 text-left p-6 ios-glass rounded-[24px] hover:scale-[1.03] hover:border-brand-neon/20 transition-all duration-300 shadow-lg">
             <div className="p-3 bg-brand-neon/10 rounded-xl text-brand-neon">
               <FiShield className="w-6 h-6" />
             </div>
@@ -180,7 +211,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex items-start gap-4 text-left p-4 rounded-xl hover:bg-white/5 transition duration-200">
+          <div className="flex items-start gap-5 text-left p-6 ios-glass rounded-[24px] hover:scale-[1.03] hover:border-brand-neon/20 transition-all duration-300 shadow-lg">
             <div className="p-3 bg-brand-neon/10 rounded-xl text-brand-neon">
               <FiTrendingUp className="w-6 h-6" />
             </div>
@@ -192,7 +223,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex items-start gap-4 text-left p-4 rounded-xl hover:bg-white/5 transition duration-200">
+          <div className="flex items-start gap-5 text-left p-6 ios-glass rounded-[24px] hover:scale-[1.03] hover:border-brand-neon/20 transition-all duration-300 shadow-lg">
             <div className="p-3 bg-brand-neon/10 rounded-xl text-brand-neon">
               <FiCheckCircle className="w-6 h-6" />
             </div>
@@ -208,8 +239,8 @@ export default function Home() {
       </section>
 
       {/* 5. Custom CTA Banner */}
-      <section className="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden glass-card p-8 sm:p-16 flex flex-col items-center text-center gap-6 border border-white/5">
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden ios-glass ios-curve-lg p-8 sm:p-16 flex flex-col items-center text-center gap-6 shadow-2xl">
           <div className="absolute inset-0 bg-gradient-to-tr from-brand-neon/5 via-transparent to-transparent pointer-events-none" />
           <span className="text-xs font-black tracking-widest text-brand-neon uppercase bg-brand-neon/10 px-3 py-1 rounded">
             MEMBERSHIP ACCESS

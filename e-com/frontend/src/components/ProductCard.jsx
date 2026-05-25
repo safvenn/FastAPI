@@ -41,12 +41,12 @@ export default function ProductCard({ product }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-20px' }}
         transition={{ duration: 0.4 }}
-        className="group relative bg-brand-surface-card rounded-2xl border border-white/5 overflow-hidden flex flex-col justify-between"
+        className="group relative ios-glass rounded-[24px] overflow-hidden flex flex-col justify-between hover:scale-[1.02] hover:border-brand-neon/25 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-all duration-300"
       >
         <Link to={`/product/${product.id}`} className="block">
           
           {/* Card Image Wrapper with hover zoom and premium blur layer */}
-          <div className="relative aspect-square w-full bg-brand-surface flex items-center justify-center p-0 overflow-hidden">
+          <div className="relative aspect-square w-full bg-transparent flex items-center justify-center p-0 overflow-hidden">
             <motion.img
               src={product.image_url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff'}
               alt={product.title}
@@ -55,7 +55,7 @@ export default function ProductCard({ product }) {
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-out"
             />
             {/* Dark gradient shadow bottom */}
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-surface-card/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
             
             {/* Quick action buttons overlay */}
             <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
