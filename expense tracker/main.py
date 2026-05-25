@@ -58,7 +58,7 @@ def login(form_data:Login,db: Session = Depends(get_db)):
     user = db.query(Users).filter(form_data.email == Users.email).first()
 
     if not user or  not verifypass(form_data.password,user.password):
-        raise HTTPException(status_code=400,detail="inavild username or password")
+        raise HTTPException(status_code=400,detail="invalid username or password")
 
     token = create_token({"sub": form_data.email})
     return{
@@ -68,7 +68,7 @@ def login(form_data:Login,db: Session = Depends(get_db)):
 
 
 @app.get("/{username}",response_model=TotalResponse,status_code=status.HTTP_200_OK)
-def total_exp(email: str = Depends(verify_tokken),db: Session = Depends(get_db)):
+def total_exp(username: str, email: str = Depends(verify_tokken),db: Session = Depends(get_db)):
     
     data = db.query(Expenses).filter(email == Expenses.user_email).order_by(Expenses.id.desc()).all()
     datax = db.query(Users).filter(email == Users.email).first()
@@ -102,13 +102,18 @@ def add(data:AddExp,db: Session = Depends(get_db),email:str = Depends(verify_tok
 
 @app.delete("/delete",status_code=status.HTTP_200_OK)
 def dele(i:int ,db:Session = Depends(get_db),email:str = Depends(verify_tokken)):
-    expense = db.query(Expenses).filter(Expenses.id == i)
-    user = db.query(Users).filter(Users.email == email).first()
+    expense_query = db.query(Expenses).filter(Expenses.id == i)
+    expense = expense_query.first()
 
-    if not expense.first():
-        raise HTTPException(status_code=400,detail="inavlid id")
-    user.total_exp -= expense.first().amount
-    expense.delete()
+    if not expense:
+        raise HTTPException(status_code=400,detail="invalid id")
+    
+    if expense.user_email != email:
+        raise HTTPException(status_code=403,detail="Not authorized to delete this expense")
+
+    user = db.query(Users).filter(Users.email == email).first()
+    user.total_exp -= expense.amount
+    expense_query.delete()
     db.commit()
 
     return {"message": "Expense deleted successfully"}
