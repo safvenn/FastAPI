@@ -11,6 +11,8 @@ from db import Base,enginne,get_db,sessionmaker
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
 import time
+from dotenv import load_dotenv
+load_dotenv()
 
 
 
