@@ -23,9 +23,17 @@ from cart.models.catitemmodel import CartitemModel
 from cart.schemas.addtocartschemas import AddtoCart
 from users.schemas.addressschemas import AddressSchema
 from users.schemas.userschema import ProfileSchema
+from dotenv import load_dotenv
 
 Base.metadata.create_all(bind=engine)
+
+
+
 app = FastAPI(docs_url="/docs", redoc_url="/redoc", openapi_url="/openapi.json")
+
+
+load_dotenv()
+
 
 app.add_middleware(
     CORSMiddleware,

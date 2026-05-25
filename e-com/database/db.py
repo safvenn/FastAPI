@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Relationship,sessionmaker,declarative_base
+from config import settings
 
-dbconnection = "postgresql://postgres:safvan@localhost:5432/e_com"
+dbconnection = settings.DATABASE_URL
 engine = create_engine(dbconnection)
 
 session_local = sessionmaker(autoflush=False,autocommit=False,bind=engine)
