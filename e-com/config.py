@@ -6,6 +6,8 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("dbconnection")
 SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY_REFRESH = os.getenv("REFRESH_SECRET_KEY")
+
 
 
 class Settings:

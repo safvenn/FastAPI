@@ -86,3 +86,53 @@ html, body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* Infinite marquee scroll for brand banners */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 25s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Subtle float for hero image */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-14px) rotate(-3deg); }
+}
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Carousel fade-in for product slides */
+@keyframes fade-slide-in {
+  0% { opacity: 0; transform: translateX(30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.animate-fade-slide {
+  animation: fade-slide-in 0.5s ease-out forwards;
+}
+
+/* Dot pulse for carousel indicators */
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+}
+.dot-active {
+  animation: dot-pulse 1.5s ease-in-out infinite;
+}
+
+/* Progress bar fill for auto-slide timer */
+@keyframes progress-fill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+.progress-bar-fill {
+  animation: progress-fill var(--slide-duration, 4s) linear forwards;
+}

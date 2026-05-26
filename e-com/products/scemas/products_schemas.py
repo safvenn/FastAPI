@@ -8,4 +8,5 @@ class ProductsSchema(BaseModel):
     sizes:list[str]
     brand:str
     image_url:str
+    price:float
 

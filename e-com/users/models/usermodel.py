@@ -11,6 +11,7 @@ class UsersModel(Base):
     password = Column(String,nullable=False)
     role = Column(String,nullable=False,default='user')
     is_verify = Column(Boolean)
+    otp = Column(Integer)
 
     cart = relationship('CartitemModel',back_populates='users')
     address = relationship('AddresModel',back_populates='users')

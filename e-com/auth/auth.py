@@ -25,6 +25,11 @@ def current_user(token: str = Depends(oauth_schema)):
         username: int = payload.get("sub")
         if username is None:
             raise HTTPException(status_code=401, detail="Invalid token: missing user")
+        
+        # Check if the token is a temporary pre-OTP token
+        if "otp" in payload:
+            raise HTTPException(status_code=403, detail="OTP verification required")
+            
         return int(username)
     except JWTError as e:
         raise HTTPException(status_code=401, detail="Invalid credentials or expired token")

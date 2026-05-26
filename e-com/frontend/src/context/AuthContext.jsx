@@ -57,6 +57,26 @@ export function AuthProvider({ children }) {
       const res = await API.post('/login', params, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
+      return {
+        success: true,
+        requiresOtp: true,
+        tempToken: res.data.access_token,
+        msg: res.data.msg || 'OTP sent'
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: err.response?.data?.detail || 'Login failed',
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyOtp = async (otp, tempToken) => {
+    setLoading(true);
+    try {
+      const res = await API.post(`/verify-otp?otp=${otp}&token=${tempToken}`);
       if (res.data.refresh_token) {
         localStorage.setItem('refresh_token', res.data.refresh_token);
       }
@@ -65,7 +85,7 @@ export function AuthProvider({ children }) {
     } catch (err) {
       return {
         success: false,
-        error: err.response?.data?.detail || 'Login failed',
+        error: err.response?.data?.detail || 'Invalid or expired OTP',
       };
     } finally {
       setLoading(false);
@@ -98,7 +118,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ token, user, role, isLoggedIn, isAdmin, loading, login, signup, logout }}
+      value={{ token, user, role, isLoggedIn, isAdmin, loading, login, verifyOtp, signup, logout }}
     >
       {children}
     </AuthContext.Provider>
