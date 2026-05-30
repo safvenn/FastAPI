@@ -62,7 +62,7 @@ export default function Checkout() {
     }
     setAddingAddress(true);
     try {
-      const res = await API.post('/addaddress', {
+      const res = await API.post('/address', {
         name: newName,
         street: newStreet,
         city: newCity,
@@ -96,7 +96,7 @@ export default function Checkout() {
     }
     setPlacing(true);
     try {
-      await API.post('/addorders', {
+      await API.post('/orders', {
         address_id: parseInt(selectedAddressId),
       });
       // Clear Cart locally & server-side
@@ -122,9 +122,9 @@ export default function Checkout() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', delay: 0.2 }}
-            className="inline-flex p-4 bg-brand-neon/10 text-brand-neon rounded-full"
+            className="inline-flex p-4 bg-brand-accent/10 text-brand-accent rounded-full"
           >
-            <FiCheckCircle className="w-16 h-16 shadow-[0_0_20px_rgba(57,255,20,0.3)] rounded-full" />
+            <FiCheckCircle className="w-16 h-16 shadow-[0_0_20px_rgba(10,132,255,0.3)] rounded-full" />
           </motion.div>
           <h2 className="text-3xl font-black text-white uppercase tracking-tight">Order Confirmed</h2>
           <p className="text-xs text-neutral-400 leading-relaxed max-w-sm mx-auto">
@@ -133,7 +133,7 @@ export default function Checkout() {
           <div className="pt-4 flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => navigate('/orders')}
-              className="flex-grow flex items-center justify-center gap-2 py-3 bg-brand-neon text-black font-extrabold text-xs tracking-widest uppercase rounded-full hover:scale-105 transition cursor-pointer"
+              className="flex-grow flex items-center justify-center gap-2 py-3 bg-brand-accent text-black font-extrabold text-xs tracking-widest uppercase rounded-full hover:scale-105 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 focus:ring-offset-black"
             >
               View Orders Timeline <FiArrowRight className="w-4 h-4" />
             </button>
@@ -154,7 +154,7 @@ export default function Checkout() {
       
       {/* Page Header */}
       <div className="border-b border-white/5 pb-6 mb-10 text-left">
-        <span className="text-xs font-black text-brand-neon tracking-widest uppercase">Secure Gateway</span>
+        <span className="text-xs font-black text-brand-accent tracking-widest uppercase">Secure Gateway</span>
         <h1 className="text-3xl font-black text-white uppercase mt-1">Shipping Checkout</h1>
       </div>
 
@@ -169,7 +169,7 @@ export default function Checkout() {
             </h3>
             <button
               onClick={() => setShowAddressForm(!showAddressForm)}
-              className="inline-flex items-center gap-1 text-xs font-bold text-brand-neon hover:underline uppercase tracking-wider cursor-pointer"
+              className="inline-flex items-center gap-1 text-xs font-bold text-brand-accent hover:underline uppercase tracking-wider cursor-pointer"
             >
               <FiPlus className="w-4.5 h-4.5" /> Add New
             </button>
@@ -183,7 +183,7 @@ export default function Checkout() {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 onSubmit={handleAddAddress}
-                className="bg-brand-surface-card border border-white/5 rounded-2xl p-5 space-y-4 overflow-hidden"
+                className="ios-glass rounded-[24px] p-6 space-y-4 overflow-hidden"
               >
                 <h4 className="text-xs font-bold text-white uppercase">Add New Shipping Address</h4>
                 
@@ -196,7 +196,7 @@ export default function Checkout() {
                       onChange={(e) => setNewName(e.target.value)}
                       placeholder="e.g. John Doe"
                       required
-                      className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none text-xs"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -207,7 +207,7 @@ export default function Checkout() {
                       onChange={(e) => setNewStreet(e.target.value)}
                       placeholder="123 Sneaker St"
                       required
-                      className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none text-xs"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -218,7 +218,7 @@ export default function Checkout() {
                       onChange={(e) => setNewCity(e.target.value)}
                       placeholder="New York"
                       required
-                      className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none text-xs"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -229,7 +229,7 @@ export default function Checkout() {
                       onChange={(e) => setNewState(e.target.value)}
                       placeholder="NY"
                       required
-                      className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none text-xs"
                     />
                   </div>
                 </div>
@@ -245,7 +245,7 @@ export default function Checkout() {
                   <button
                     type="submit"
                     disabled={addingAddress}
-                    className="px-5 py-2 bg-brand-neon text-black text-xs font-bold rounded-full hover:scale-105 transition cursor-pointer"
+                    className="px-5 py-2 bg-brand-accent text-black text-xs font-extrabold min-h-[44px] rounded-full hover:scale-105 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 focus:ring-offset-black"
                   >
                     {addingAddress ? 'Adding...' : 'Save Address'}
                   </button>
@@ -269,17 +269,17 @@ export default function Checkout() {
                     onClick={() => setSelectedAddressId(address.id)}
                     className={`relative p-5 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between h-36 ${
                       isSelected
-                        ? 'bg-brand-surface-card border-brand-neon shadow-[0_0_12px_rgba(57,255,20,0.1)]'
+                        ? 'bg-brand-surface-card border-brand-accent shadow-[0_0_12px_rgba(10,132,255,0.15)]'
                         : 'bg-brand-surface border-white/5 hover:border-white/15'
                     }`}
                   >
                     {isSelected && (
-                      <span className="absolute top-4 right-4 bg-brand-neon text-black rounded-full p-1">
+                      <span className="absolute top-4 right-4 bg-brand-accent text-black rounded-full p-1">
                         <FiCheck className="w-3 h-3 font-black" />
                       </span>
                     )}
                     <div>
-                      <span className="text-[10px] text-brand-neon font-black tracking-widest uppercase block mb-1">
+                      <span className="text-[10px] text-brand-accent font-black tracking-widest uppercase block mb-1">
                         SHIPPING DESK
                       </span>
                       <h4 className="text-xs font-extrabold text-white">{address.name}</h4>
@@ -302,7 +302,7 @@ export default function Checkout() {
               </p>
               <button
                 onClick={() => setShowAddressForm(true)}
-                className="mt-4 px-5 py-2 bg-brand-neon text-black text-xs font-bold rounded-full hover:scale-105 transition cursor-pointer"
+                className="mt-4 px-5 py-2 bg-brand-accent text-black text-xs font-extrabold min-h-[44px] rounded-full hover:scale-105 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 focus:ring-offset-black"
               >
                 Add Shipping Address
               </button>
@@ -312,7 +312,7 @@ export default function Checkout() {
         </div>
 
         {/* Right Summary column */}
-        <div className="lg:col-span-4 bg-brand-surface-card border border-white/5 rounded-3xl p-6 space-y-6 text-left">
+        <div className="lg:col-span-4 ios-glass rounded-[24px] p-6 space-y-6 text-left">
           
           <h3 className="text-sm font-bold text-white uppercase tracking-wider">
             Order Verification
@@ -348,7 +348,7 @@ export default function Checkout() {
             <div className="flex justify-between text-xs text-neutral-400">
               <span>Shipping Fee</span>
               {totalAmount > 300 ? (
-                <span className="text-brand-neon font-bold tracking-widest">FREE</span>
+                <span className="text-brand-accent font-bold tracking-widest">FREE</span>
               ) : (
                 <span className="text-white font-semibold">$15</span>
               )}
@@ -358,7 +358,7 @@ export default function Checkout() {
 
             <div className="flex justify-between items-baseline pt-1">
               <span className="text-xs font-bold text-white uppercase">Grand Total</span>
-              <span className="text-lg font-black text-brand-neon">${totalAmount + (totalAmount > 300 ? 0 : 15)}</span>
+              <span className="text-lg font-black text-brand-accent">${totalAmount + (totalAmount > 300 ? 0 : 15)}</span>
             </div>
 
           </div>
@@ -367,10 +367,10 @@ export default function Checkout() {
             <button
               onClick={handlePlaceOrder}
               disabled={placing || !selectedAddressId}
-              className={`w-full flex items-center justify-center gap-2 py-4 rounded-full font-black text-xs tracking-widest uppercase transition-all duration-300 shadow-xl cursor-pointer ${
+              className={`w-full flex items-center justify-center gap-2 py-4 min-h-[44px] rounded-full font-extrabold text-xs tracking-widest uppercase transition-all duration-300 shadow-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 focus:ring-offset-black ${
                 !selectedAddressId
                   ? 'bg-neutral-800 text-neutral-500 border border-white/5 cursor-not-allowed'
-                  : 'bg-brand-neon text-black hover:scale-105 shadow-brand-neon/10'
+                  : 'bg-brand-accent text-black hover:scale-105 shadow-brand-accent/10'
               }`}
             >
               <FiShoppingBag className="w-4 h-4" />

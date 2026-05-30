@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime
 
 class Signup(BaseModel):
     username:str
@@ -22,6 +23,8 @@ class Expresponse(BaseModel):
     amount:int
     category:str
     discription:Optional[str] = None
+    created_at:Optional[datetime] = None
+    updated_at:Optional[datetime] = None
 
 
 class TotalResponse(BaseModel):

@@ -74,27 +74,36 @@ export default function Products() {
     return matchesBrand && matchesSearch;
   });
 
+  // Marketplace-style result label
+  const resultLabel =
+    selectedBrand && selectedBrand !== 'All'
+      ? `${filteredProducts.length} ${selectedBrand}`
+      : `${filteredProducts.length} Sneakers`;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-[75vh]">
       
       {/* Header section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 text-left">
         <div>
-          <span className="text-xs font-black text-brand-neon tracking-widest uppercase">Sneaker Catalogue</span>
+          <span className="text-xs font-black text-brand-accent tracking-widest uppercase">Sneaker Catalogue</span>
           <h1 className="text-3xl sm:text-4xl font-black text-white uppercase mt-1">
             Shop Premium Sneakers
           </h1>
-          <p className="text-xs text-neutral-500 mt-2">
-            Showing {filteredProducts.length} premium sneakers
+          {/* Marketplace-style result count */}
+          <p className="text-xs text-neutral-500 mt-2 tracking-wide">
+            {resultLabel}
           </p>
         </div>
 
-        {/* Live Search Input */}
-        <SearchBar value={searchQuery} onChange={handleSearchChange} />
+        {/* Live Search Input — glass filter bar */}
+        <div className="ios-glass rounded-[20px] p-1.5">
+          <SearchBar value={searchQuery} onChange={handleSearchChange} />
+        </div>
       </div>
 
-      {/* Horizontal Brand Pills Filter */}
-      <div className="mb-8 border-b border-white/5 pb-6">
+      {/* Horizontal Brand Pills Filter — glass container */}
+      <div className="ios-glass rounded-[20px] px-4 mb-8 border-b border-white/5 pb-4">
         <BrandFilter
           brands={brands}
           selectedBrand={selectedBrand}
@@ -114,7 +123,7 @@ export default function Products() {
           <p className="text-red-400 text-sm font-semibold">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-4 px-6 py-2 bg-white text-black text-xs font-bold uppercase rounded-full hover:bg-brand-neon transition duration-200 cursor-pointer"
+            className="mt-4 px-6 py-2 bg-white text-black text-xs font-bold uppercase rounded-full hover:bg-brand-accent transition duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-accent"
           >
             Retry Connection
           </button>
@@ -158,7 +167,7 @@ export default function Products() {
               setSearchQuery('');
               setSearchParams({});
             }}
-            className="mt-6 px-6 py-2.5 bg-white/5 border border-white/10 hover:border-white/20 text-white text-xs font-bold uppercase rounded-full hover:bg-white/10 transition duration-200 cursor-pointer"
+            className="mt-6 px-6 py-2.5 bg-white/5 border border-white/10 hover:border-white/20 text-white text-xs font-bold uppercase rounded-full hover:bg-white/10 transition duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-accent"
           >
             Clear Filters
           </button>

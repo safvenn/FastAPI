@@ -21,7 +21,7 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-brand-surface-card border border-white/5 p-4 rounded-2xl"
+      className="ios-glass rounded-[20px] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
     >
       {/* Left side: Sneaker info & Image */}
       <div className="flex items-center gap-4">
@@ -36,7 +36,7 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }) {
 
         {/* Sneaker metadata */}
         <div>
-          <span className="text-[10px] font-black text-brand-neon uppercase tracking-widest bg-brand-neon/10 px-2 py-0.5 rounded">
+          <span className="text-brand-accent text-xs font-black uppercase tracking-widest bg-brand-accent/10 px-2 py-0.5 rounded">
             {item.brand}
           </span>
           <h4 className="text-sm font-semibold text-white mt-1.5 line-clamp-1">{item.title}</h4>
@@ -48,12 +48,13 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }) {
 
       {/* Right side: Quantity control & Price & Delete */}
       <div className="flex items-center justify-between sm:justify-end gap-6 border-t sm:border-none border-white/5 pt-3 sm:pt-0">
-        
+
         {/* Quantity Controls */}
-        <div className="flex items-center bg-brand-surface border border-white/10 rounded-full px-2 py-1">
+        <div className="flex items-center gap-1">
           <button
             onClick={handleDecrease}
-            className="text-neutral-400 hover:text-white p-1 rounded-full cursor-pointer hover:bg-white/5 transition"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-400 hover:text-white bg-white/5 border border-white/10 hover:border-brand-accent/50 rounded-full cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-brand-accent"
+            aria-label="Decrease quantity"
           >
             <FiMinus className="w-3.5 h-3.5" />
           </button>
@@ -62,7 +63,8 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }) {
           </span>
           <button
             onClick={handleIncrease}
-            className="text-neutral-400 hover:text-white p-1 rounded-full cursor-pointer hover:bg-white/5 transition"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-neutral-400 hover:text-white bg-white/5 border border-white/10 hover:border-brand-accent/50 rounded-full cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-brand-accent"
+            aria-label="Increase quantity"
           >
             <FiPlus className="w-3.5 h-3.5" />
           </button>
@@ -77,8 +79,9 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }) {
 
           <button
             onClick={() => onRemove(item.cart_id)}
-            className="text-neutral-500 hover:text-red-400 p-2 rounded-xl hover:bg-red-500/10 transition-colors cursor-pointer"
+            className="text-neutral-500 hover:text-red-400 p-2 rounded-xl hover:bg-red-500/10 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-accent"
             title="Remove item"
+            aria-label="Remove item"
           >
             <FiTrash2 className="w-4.5 h-4.5" />
           </button>

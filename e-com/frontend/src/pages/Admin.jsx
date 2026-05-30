@@ -271,7 +271,7 @@ export default function Admin() {
       
       {/* Page Header */}
       <div className="border-b border-white/5 pb-6 mb-10 text-left">
-        <span className="text-xs font-black text-brand-neon tracking-widest uppercase">
+        <span className="text-xs font-black text-brand-accent tracking-widest uppercase">
           Authorization Clearance Level 2
         </span>
         <h1 className="text-3xl font-black text-white uppercase mt-1">Admin Control Console</h1>
@@ -290,7 +290,7 @@ export default function Admin() {
               {stats.products}
             </span>
           </div>
-          <div className="p-3.5 bg-brand-neon/10 rounded-2xl text-brand-neon">
+          <div className="p-3.5 bg-brand-accent/10 rounded-2xl text-brand-accent">
             <FiPackage className="w-6 h-6" />
           </div>
         </div>
@@ -305,7 +305,7 @@ export default function Admin() {
               {stats.users}
             </span>
           </div>
-          <div className="p-3.5 bg-brand-neon/10 rounded-2xl text-brand-neon">
+          <div className="p-3.5 bg-brand-accent/10 rounded-2xl text-brand-accent">
             <FiUsers className="w-6 h-6" />
           </div>
         </div>
@@ -320,7 +320,7 @@ export default function Admin() {
               {stats.orders}
             </span>
           </div>
-          <div className="p-3.5 bg-brand-neon/10 rounded-2xl text-brand-neon">
+          <div className="p-3.5 bg-brand-accent/10 rounded-2xl text-brand-accent">
             <FiTrendingUp className="w-6 h-6" />
           </div>
         </div>
@@ -348,7 +348,7 @@ export default function Admin() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-bold uppercase tracking-widest rounded-2xl transition duration-150 cursor-pointer ${
                   isActive
-                    ? 'bg-brand-neon text-black font-black shadow-md shadow-brand-neon/10'
+                    ? 'bg-brand-accent text-black font-black shadow-md shadow-brand-accent/10'
                     : 'text-neutral-400 hover:text-white hover:bg-white/5'
                 }`}
               >
@@ -373,7 +373,7 @@ export default function Admin() {
                 {!showProductForm && (
                   <button
                     onClick={() => setShowProductForm(true)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-neon text-black text-xs font-black rounded-full hover:scale-105 transition cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-accent text-black text-xs font-extrabold min-h-[44px] rounded-full hover:scale-105 transition cursor-pointer focus:ring-2 focus:ring-brand-accent focus:outline-none"
                   >
                     <FiPlus className="w-4 h-4 font-black" /> Add Sneaker
                   </button>
@@ -409,7 +409,7 @@ export default function Admin() {
                           onChange={(e) => setTitle(e.target.value)}
                           placeholder="e.g. Air Force 1 Retro"
                           required
-                          className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                          className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-xs text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none"
                         />
                       </div>
 
@@ -421,7 +421,7 @@ export default function Admin() {
                           onChange={(e) => setBrand(e.target.value)}
                           placeholder="e.g. Nike"
                           required
-                          className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                          className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-xs text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none"
                         />
                       </div>
 
@@ -433,7 +433,7 @@ export default function Admin() {
                           onChange={(e) => setPrice(e.target.value)}
                           placeholder="180"
                           required
-                          className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                          className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-xs text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none"
                         />
                       </div>
 
@@ -445,7 +445,7 @@ export default function Admin() {
                           onChange={(e) => setSizesInput(e.target.value)}
                           placeholder="8, 9, 10, 11"
                           required
-                          className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                          className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-xs text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none"
                         />
                       </div>
 
@@ -456,7 +456,7 @@ export default function Admin() {
                           value={imageUrl}
                           onChange={(e) => setImageUrl(e.target.value)}
                           placeholder="https://example.com/shoe-photo.png"
-                          className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                          className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-xs text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none"
                         />
                       </div>
 
@@ -468,7 +468,7 @@ export default function Admin() {
                           placeholder="Enter details regarding authentic sneaker packaging, colorways, etc."
                           rows="3"
                           required
-                          className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                          className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-xs text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none"
                         />
                       </div>
 
@@ -485,7 +485,7 @@ export default function Admin() {
                       <button
                         type="submit"
                         disabled={submittingProduct}
-                        className="px-5 py-2 bg-brand-neon text-black text-xs font-bold rounded-full hover:scale-105 transition cursor-pointer"
+                        className="px-5 py-2 bg-brand-accent text-black text-xs font-extrabold min-h-[44px] rounded-full hover:scale-105 transition cursor-pointer focus:ring-2 focus:ring-brand-accent focus:outline-none"
                       >
                         {submittingProduct ? 'Submitting...' : 'Save Product'}
                       </button>
@@ -502,7 +502,7 @@ export default function Admin() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-white/5 text-neutral-500 uppercase tracking-widest font-extrabold pb-3">
+                      <tr className="border-b border-white/5 text-brand-accent text-xs uppercase tracking-widest font-extrabold pb-3">
                         <th className="pb-3 pr-4">Sneaker</th>
                         <th className="pb-3 pr-4">Brand</th>
                         <th className="pb-3 pr-4">Price</th>
@@ -516,7 +516,7 @@ export default function Admin() {
                             {prod.title}
                           </td>
                           <td className="py-3 pr-4">
-                            <span className="px-2 py-0.5 bg-brand-neon/15 text-brand-neon text-[9px] font-bold uppercase rounded">
+                            <span className="px-2 py-0.5 bg-brand-accent/15 text-brand-accent text-[9px] font-bold uppercase rounded">
                               {prod.brand}
                             </span>
                           </td>
@@ -524,7 +524,7 @@ export default function Admin() {
                           <td className="py-3 text-right flex items-center justify-end gap-1">
                             <button
                               onClick={() => handleOpenEditProduct(prod)}
-                              className="p-2 text-neutral-400 hover:text-brand-neon hover:bg-brand-neon/10 rounded-lg cursor-pointer"
+                              className="p-2 text-neutral-400 hover:text-brand-accent hover:bg-brand-accent/10 rounded-lg cursor-pointer"
                               title="Edit Drop"
                             >
                               <FiEdit3 className="w-3.5 h-3.5" />
@@ -566,7 +566,7 @@ export default function Admin() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-white/5 text-neutral-500 uppercase tracking-widest font-extrabold pb-3">
+                      <tr className="border-b border-white/5 text-brand-accent text-xs uppercase tracking-widest font-extrabold pb-3">
                         <th className="pb-3 pr-4">Username</th>
                         <th className="pb-3 pr-4">Email</th>
                         <th className="pb-3 pr-4">Authorization</th>
@@ -584,7 +584,7 @@ export default function Admin() {
                               <span
                                 className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded ${
                                   isUserAdmin
-                                    ? 'bg-brand-neon/15 text-brand-neon'
+                                    ? 'bg-brand-accent/15 text-brand-accent'
                                     : 'bg-white/5 text-neutral-400'
                                 }`}
                               >
@@ -596,7 +596,7 @@ export default function Admin() {
                                 onClick={() => handleRoleUpdate(user.id, user.role)}
                                 className={`p-2 rounded-lg cursor-pointer ${
                                   isUserAdmin
-                                    ? 'text-brand-neon hover:bg-brand-neon/10'
+                                    ? 'text-brand-accent hover:bg-brand-accent/10'
                                     : 'text-neutral-500 hover:text-white hover:bg-white/5'
                                 }`}
                                 title={isUserAdmin ? 'Demote to regular user' : 'Authorize as Admin'}
@@ -636,7 +636,7 @@ export default function Admin() {
               </div>
 
               <div className="p-6 bg-brand-surface-card border border-white/5 rounded-3xl text-left space-y-4">
-                <div className="flex gap-3 text-brand-neon">
+                <div className="flex gap-3 text-brand-accent">
                   <FiAlertCircle className="w-6 h-6 flex-shrink-0" />
                   <div className="space-y-1">
                     <h4 className="text-xs font-bold uppercase">Timeline Step Override</h4>
@@ -651,7 +651,7 @@ export default function Admin() {
                     { id: 'pending', label: 'Placed', color: 'bg-yellow-400/10 text-yellow-400 border-yellow-400/30' },
                     { id: 'processing', label: 'Legit Checking', color: 'bg-blue-400/10 text-blue-400 border-blue-400/30' },
                     { id: 'shipped', label: 'Shipped', color: 'bg-indigo-400/10 text-indigo-400 border-indigo-400/30' },
-                    { id: 'delivered', label: 'Delivered', color: 'bg-brand-neon/10 text-brand-neon border-brand-neon/30' },
+                    { id: 'delivered', label: 'Delivered', color: 'bg-brand-accent/10 text-brand-accent border-brand-accent/30' },
                   ].map((btn) => (
                     <button
                       key={btn.id}
@@ -670,7 +670,7 @@ export default function Admin() {
                 <div className="overflow-x-auto pt-2">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-white/5 text-neutral-500 uppercase tracking-widest font-extrabold pb-3">
+                      <tr className="border-b border-white/5 text-brand-accent text-xs uppercase tracking-widest font-extrabold pb-3">
                         <th className="pb-3 pr-4">Order ID</th>
                         <th className="pb-3 pr-4">Customer</th>
                         <th className="pb-3 pr-4">Charge</th>
@@ -692,7 +692,7 @@ export default function Admin() {
                           <td className="py-3 pr-4 text-left">
                             <span className={`px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider border ${
                               order.status === 'delivered'
-                                ? 'bg-brand-neon/10 border-brand-neon/20 text-brand-neon shadow-[0_0_10px_rgba(57,255,20,0.1)]'
+                                ? 'bg-brand-accent/10 border-brand-accent/20 text-brand-accent shadow-[0_0_10px_rgba(10,132,255,0.1)]'
                                 : order.status === 'shipped'
                                 ? 'bg-indigo-400/10 border-indigo-400/20 text-indigo-400'
                                 : order.status === 'processing'
@@ -706,7 +706,7 @@ export default function Admin() {
                             <select
                               value={order.status || 'pending'}
                               onChange={(e) => handleUpdateIndividualOrderStatus(order.id, e.target.value)}
-                              className="px-2.5 py-1.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon focus:ring-1 focus:ring-brand-neon transition cursor-pointer"
+                              className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-[12px] text-xs text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none transition cursor-pointer"
                             >
                               <option value="pending">Placed</option>
                               <option value="processing">Legit Checking</option>

@@ -15,6 +15,39 @@ export default function Profile() {
   const [profileData, setProfileData] = useState(null);
   const [profileLoading, setProfileLoading] = useState(false);
 
+  // Profile update states
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [usernameSubmitting, setUsernameSubmitting] = useState(false);
+
+  const handleUpdateUsername = async (e) => {
+    e.preventDefault();
+    if (!newUsername.trim()) {
+      toast.error('Username cannot be empty');
+      return;
+    }
+    setUsernameSubmitting(true);
+    try {
+      const payload = {
+        id: String(profileData.id),
+        name: newUsername.trim(),
+        email: profileData.email
+      };
+      const res = await API.put('/updateprofile', payload);
+      setProfileData(prev => ({
+        ...prev,
+        username: res.data.username || newUsername.trim()
+      }));
+      toast.success('Profile name updated successfully!');
+      setIsEditingUsername(false);
+    } catch (err) {
+      const errMsg = err.response?.data?.detail || 'Failed to update username';
+      toast.error(errMsg);
+    } finally {
+      setUsernameSubmitting(false);
+    }
+  };
+
   // Address form states
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState(null); // If editing, stores address ID
@@ -87,11 +120,11 @@ export default function Profile() {
     try {
       if (editId) {
         // Edit address API call
-        await API.put(`/updateaddress/${editId}`, { name, street, city, state });
+        await API.put(`/address/${editId}`, { name, street, city, state });
         toast.success('Address updated successfully');
       } else {
         // Create new address API call
-        await API.post('/addaddress', { name, street, city, state });
+        await API.post('/address', { name, street, city, state });
         toast.success('Address created successfully');
       }
       handleCloseForm();
@@ -106,7 +139,7 @@ export default function Profile() {
   const handleDelete = async (id) => {
     if (window.confirm('Delete this shipping address?')) {
       try {
-        await API.delete(`/deladdress?id=${id}`);
+        await API.delete(`/address/${id}`);
         toast.success('Address deleted successfully');
         await fetchAddresses();
       } catch (err) {
@@ -126,25 +159,71 @@ export default function Profile() {
       
       {/* Header */}
       <div className="border-b border-white/5 pb-6 mb-10 text-left">
-        <span className="text-xs font-black text-brand-neon tracking-widest uppercase">Member Desk</span>
+        <span className="text-xs font-black text-brand-accent tracking-widest uppercase">Member Desk</span>
         <h1 className="text-3xl font-black text-white uppercase mt-1">My Account Profile</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         
         {/* Left Side: Profile overview card & fast action controls */}
-        <div className="lg:col-span-4 bg-brand-surface-card border border-white/5 rounded-3xl p-6 text-left space-y-6">
+        <div className="lg:col-span-4 ios-glass rounded-[24px] p-6 text-left space-y-6">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full bg-brand-neon/10 border border-brand-neon flex items-center justify-center text-brand-neon shadow-[0_0_15px_rgba(57,255,20,0.15)]">
+            <div className="w-14 h-14 rounded-full bg-brand-accent/10 border border-brand-accent flex items-center justify-center text-brand-accent shadow-[0_0_15px_rgba(10,132,255,0.15)]">
               <FiUser className="w-7 h-7" />
             </div>
-            <div>
-              <span className="text-[9px] font-black text-brand-neon tracking-widest uppercase bg-brand-neon/15 px-2 py-0.5 rounded">
+            <div className="flex-1 min-w-0">
+              <span className="text-[9px] font-black text-brand-accent tracking-widest uppercase bg-brand-accent/15 px-2 py-0.5 rounded">
                 {profileData?.role === 'admin' ? 'Administrator' : 'Sneakerhead'}
               </span>
-              <h3 className="text-base font-extrabold text-white mt-1.5">
-                {profileLoading ? 'Loading...' : (profileData?.username || 'Club Member')}
-              </h3>
+              {isEditingUsername ? (
+                <form onSubmit={handleUpdateUsername} className="mt-2 space-y-2">
+                  <input
+                    type="text"
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    required
+                    disabled={usernameSubmitting}
+                    placeholder="New username"
+                    className="w-full px-3 py-1.5 bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none text-xs"
+                    autoFocus
+                  />
+                  <div className="flex gap-2 justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setIsEditingUsername(false)}
+                      disabled={usernameSubmitting}
+                      className="px-2.5 py-1 bg-white/5 hover:bg-white/10 text-[10px] text-neutral-400 hover:text-white rounded-full transition cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={usernameSubmitting}
+                      className="px-3 py-1 bg-brand-accent text-black text-[10px] font-extrabold rounded-full min-h-[44px] hover:scale-105 transition cursor-pointer focus:ring-brand-accent"
+                    >
+                      {usernameSubmitting ? 'Saving...' : 'Save'}
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="flex items-center gap-2 mt-1.5">
+                  <h3 className="text-base font-extrabold text-white truncate">
+                    {profileLoading ? 'Loading...' : (profileData?.username || 'Club Member')}
+                  </h3>
+                  {!profileLoading && profileData && (
+                    <button
+                      onClick={() => {
+                        setNewUsername(profileData.username || '');
+                        setIsEditingUsername(true);
+                      }}
+                      className="p-1 hover:text-brand-accent text-neutral-400 transition cursor-pointer flex-shrink-0"
+                      title="Edit Username"
+                    >
+                      <FiEdit3 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              )}
               <p className="text-xs text-neutral-400 mt-0.5 block truncate">
                 {profileLoading ? 'Retrieving email...' : (profileData?.email || 'No email registered')}
               </p>
@@ -172,7 +251,7 @@ export default function Profile() {
             {!showForm && (
               <button
                 onClick={() => setShowForm(true)}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-neon hover:underline uppercase tracking-wider cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-accent hover:underline uppercase tracking-wider cursor-pointer"
               >
                 <FiPlus className="w-4 h-4 font-black" /> Add New
               </button>
@@ -187,7 +266,7 @@ export default function Profile() {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 onSubmit={handleSubmit}
-                className="bg-brand-surface-card border border-white/5 rounded-3xl p-6 space-y-4 overflow-hidden"
+                className="ios-glass rounded-[24px] p-6 space-y-4 overflow-hidden"
               >
                 <div className="flex justify-between items-center mb-2">
                   <h4 className="text-xs font-bold text-white uppercase">
@@ -207,7 +286,7 @@ export default function Profile() {
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Address tag name (e.g. Home)"
                       required
-                      className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none text-xs"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -218,7 +297,7 @@ export default function Profile() {
                       onChange={(e) => setStreet(e.target.value)}
                       placeholder="10 Main St, App 4B"
                       required
-                      className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none text-xs"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -229,7 +308,7 @@ export default function Profile() {
                       onChange={(e) => setCity(e.target.value)}
                       placeholder="Los Angeles"
                       required
-                      className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none text-xs"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -240,7 +319,7 @@ export default function Profile() {
                       onChange={(e) => setState(e.target.value)}
                       placeholder="CA"
                       required
-                      className="w-full px-3.5 py-2.5 bg-brand-surface border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-neon"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none text-xs"
                     />
                   </div>
                 </div>
@@ -256,7 +335,7 @@ export default function Profile() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2 bg-brand-neon text-black text-xs font-bold rounded-full hover:scale-105 transition cursor-pointer"
+                    className="px-5 bg-brand-accent text-black text-xs font-extrabold rounded-full min-h-[44px] hover:scale-105 transition cursor-pointer focus:ring-brand-accent"
                   >
                     {submitting ? 'Processing...' : 'Save Fulfill'}
                   </button>
@@ -281,19 +360,19 @@ export default function Profile() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
                     key={address.id}
-                    className="p-5 rounded-3xl bg-brand-surface border border-white/5 flex flex-col justify-between h-40"
+                    className="ios-glass rounded-[24px] p-6 flex flex-col justify-between h-40"
                   >
                     <div>
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] text-neutral-500 font-extrabold tracking-widest uppercase flex items-center gap-1">
-                          <FiMapPin className="text-brand-neon" /> SHIPPING BOX
+                          <FiMapPin className="text-brand-accent" /> SHIPPING BOX
                         </span>
                         
                         {/* Edit & Delete Action row */}
                         <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => handleOpenEdit(address)}
-                            className="p-1.5 text-neutral-500 hover:text-brand-neon hover:bg-brand-neon/10 rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-neutral-500 hover:text-brand-accent hover:bg-brand-accent/10 rounded-lg transition-colors cursor-pointer"
                           >
                             <FiEdit3 className="w-3.5 h-3.5" />
                           </button>

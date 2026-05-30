@@ -42,7 +42,7 @@ from orders.routes.ordersroutes import router as ordersroutes
 from auth.routes.authroutes import router as authroutes
 
 
-#Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { FiShoppingBag, FiUser, FiSearch, FiMenu, FiX, FiLogOut, FiSliders } from 'react-icons/fi';
@@ -42,8 +43,8 @@ export default function Navbar() {
         
         {/* Left Side: Brand Logo */}
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="text-2xl font-black tracking-tighter text-white group-hover:text-brand-neon transition-colors duration-300">
-            KICKS<span className="text-brand-neon">.</span>
+          <span className="text-2xl font-black tracking-tighter text-white group-hover:text-brand-accent transition-colors duration-300">
+            KICKS<span className="text-brand-accent">.</span>
           </span>
         </Link>
 
@@ -52,7 +53,7 @@ export default function Navbar() {
           <Link
             to="/"
             className={`text-sm font-semibold tracking-wide uppercase transition-colors duration-200 ${
-              isActive('/') ? 'text-brand-neon font-black' : 'text-neutral-400 hover:text-white'
+              isActive('/') ? 'text-brand-accent font-black' : 'text-neutral-400 hover:text-white'
             }`}
           >
             Home
@@ -60,7 +61,7 @@ export default function Navbar() {
           <Link
             to="/products"
             className={`text-sm font-semibold tracking-wide uppercase transition-colors duration-200 ${
-              isActive('/products') ? 'text-brand-neon font-black' : 'text-neutral-400 hover:text-white'
+              isActive('/products') ? 'text-brand-accent font-black' : 'text-neutral-400 hover:text-white'
             }`}
           >
             Shop
@@ -89,7 +90,7 @@ export default function Navbar() {
                     autoFocus
                     className="w-full bg-transparent text-sm text-white focus:outline-none border-none pl-1"
                   />
-                  <button type="submit" className="text-neutral-400 hover:text-brand-neon p-0.5">
+                  <button type="submit" className="text-neutral-400 hover:text-brand-accent p-0.5">
                     <FiSearch className="w-4 h-4" />
                   </button>
                   <button
@@ -103,7 +104,7 @@ export default function Navbar() {
               ) : (
                 <button
                   onClick={() => setSearchOpen(true)}
-                  className="text-neutral-400 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors duration-200"
+                  className="text-neutral-400 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-brand-accent"
                 >
                   <FiSearch className="w-5 h-5" />
                 </button>
@@ -114,11 +115,11 @@ export default function Navbar() {
           {/* Shopping Cart Icon with Badge */}
           <Link
             to="/cart"
-            className="relative text-neutral-400 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors duration-200"
+            className="relative text-neutral-400 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-brand-accent"
           >
             <FiShoppingBag className="w-5 h-5" />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 bg-brand-neon text-black text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center animate-bounce shadow-[0_0_8px_rgba(57,255,20,0.5)]">
+              <span className="absolute -top-1 -right-1 bg-brand-accent text-black text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center animate-bounce shadow-[0_0_8px_rgba(10,132,255,0.5)]">
                 {totalItems}
               </span>
             )}
@@ -130,7 +131,7 @@ export default function Navbar() {
               <>
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="text-neutral-400 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors duration-200 focus:outline-none"
+                  className="text-neutral-400 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-brand-accent"
                 >
                   <FiUser className="w-5 h-5" />
                 </button>
@@ -154,7 +155,7 @@ export default function Navbar() {
                           onClick={() => setProfileDropdownOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                         >
-                          <FiUser className="w-4 h-4 text-brand-neon" />
+                          <FiUser className="w-4 h-4 text-brand-accent" />
                           My Profile
                         </Link>
                         <Link
@@ -162,14 +163,14 @@ export default function Navbar() {
                           onClick={() => setProfileDropdownOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                         >
-                          <FiShoppingBag className="w-4 h-4 text-brand-neon" />
+                          <FiShoppingBag className="w-4 h-4 text-brand-accent" />
                           My Orders
                         </Link>
                         {isAdmin && (
                           <Link
                             to="/admin"
                             onClick={() => setProfileDropdownOpen(false)}
-                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-brand-neon hover:text-brand-neon hover:bg-brand-neon/10 rounded-lg transition-colors font-bold"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-brand-accent hover:text-brand-accent hover:bg-brand-accent/10 rounded-lg transition-colors font-bold"
                           >
                             <FiSliders className="w-4 h-4" />
                             Admin Panel
@@ -191,7 +192,7 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="hidden md:inline-flex items-center justify-center px-5 py-2 text-xs font-bold tracking-widest uppercase rounded-full border border-white/10 hover:border-brand-neon hover:text-brand-neon hover:bg-brand-neon/5 transition-all duration-300"
+                className="hidden md:inline-flex items-center justify-center px-5 py-2 text-xs font-bold tracking-widest uppercase rounded-full border border-white/10 hover:border-brand-accent hover:text-brand-accent hover:bg-brand-accent/5 transition-all duration-300"
               >
                 Log In
               </Link>
@@ -201,7 +202,7 @@ export default function Navbar() {
           {/* Hamburger Menu (Mobile Only) */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-neutral-400 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors duration-200"
+            className="md:hidden text-neutral-400 hover:text-white p-2 rounded-full hover:bg-white/5 transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-brand-accent"
           >
             {mobileMenuOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
           </button>
@@ -223,7 +224,7 @@ export default function Navbar() {
                 to="/"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`text-sm font-semibold tracking-wide uppercase px-3 py-2 rounded-lg ${
-                  isActive('/') ? 'text-brand-neon bg-white/5 font-extrabold' : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                  isActive('/') ? 'text-brand-accent bg-white/5 font-extrabold' : 'text-neutral-400 hover:text-white hover:bg-white/5'
                 }`}
               >
                 Home
@@ -232,7 +233,7 @@ export default function Navbar() {
                 to="/products"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`text-sm font-semibold tracking-wide uppercase px-3 py-2 rounded-lg ${
-                  isActive('/products') ? 'text-brand-neon bg-white/5 font-extrabold' : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                  isActive('/products') ? 'text-brand-accent bg-white/5 font-extrabold' : 'text-neutral-400 hover:text-white hover:bg-white/5'
                 }`}
               >
                 Shop

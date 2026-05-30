@@ -1,5 +1,5 @@
 from db import Base,get_db,Relationship
-from sqlalchemy import Column,String,Integer,ForeignKey,create_engine
+from sqlalchemy import Column,String,Integer,ForeignKey,create_engine,DateTime
 
 
 
@@ -25,5 +25,7 @@ class Expenses(Base):
     category = Column(String,nullable=False)
     #new coloumn 
     discription = Column(String)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
     expense = Relationship(Users,back_populates="user")

@@ -12,14 +12,14 @@ const shimmerVariants = {
   },
 };
 
-const shimmerBackground = 'linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 50%, #1f1f1f 75%)';
+const shimmerBackground = 'linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.05) 75%)';
 
 export function ProductSkeleton() {
   return (
-    <div className="bg-brand-surface-card rounded-2xl border border-white/5 p-4 flex flex-col justify-between h-[360px] overflow-hidden">
+    <div className="bg-brand-surface-card rounded-[20px] border border-white/5 p-4 flex flex-col justify-between h-[360px] overflow-hidden">
       <div>
         {/* Aspect Image Area */}
-        <div className="relative aspect-square w-full bg-brand-surface rounded-xl overflow-hidden mb-4">
+        <div className="relative aspect-square w-full bg-brand-surface rounded-[12px] overflow-hidden mb-4">
           <motion.div
             variants={shimmerVariants}
             animate="animate"
@@ -34,7 +34,7 @@ export function ProductSkeleton() {
         </div>
 
         {/* Small Brand Pill */}
-        <div className="w-16 h-4 bg-white/5 rounded-md overflow-hidden relative">
+        <div className="w-16 h-4 bg-white/5 rounded-[12px] overflow-hidden relative">
           <motion.div
             variants={shimmerVariants}
             animate="animate"
@@ -49,7 +49,7 @@ export function ProductSkeleton() {
         </div>
 
         {/* Title line 1 */}
-        <div className="w-3/4 h-5 bg-white/5 rounded-md overflow-hidden relative mt-3">
+        <div className="w-3/4 h-5 bg-white/5 rounded-[12px] overflow-hidden relative mt-3">
           <motion.div
             variants={shimmerVariants}
             animate="animate"
@@ -66,7 +66,7 @@ export function ProductSkeleton() {
         {/* Size pills */}
         <div className="flex gap-1.5 mt-3">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="w-10 h-5 bg-white/5 rounded overflow-hidden relative">
+            <div key={n} className="w-10 h-5 bg-white/5 rounded-[12px] overflow-hidden relative">
               <motion.div
                 variants={shimmerVariants}
                 animate="animate"
@@ -85,7 +85,7 @@ export function ProductSkeleton() {
 
       {/* Price + arrow row */}
       <div className="flex items-center justify-between mt-6 pt-2">
-        <div className="w-16 h-6 bg-white/5 rounded-md overflow-hidden relative">
+        <div className="w-16 h-6 bg-white/5 rounded-[12px] overflow-hidden relative">
           <motion.div
             variants={shimmerVariants}
             animate="animate"
@@ -121,7 +121,7 @@ export function TableRowSkeleton() {
   return (
     <div className="flex items-center justify-between py-4 border-b border-white/5 gap-4">
       <div className="flex items-center gap-3 w-1/2">
-        <div className="w-10 h-10 bg-white/5 rounded-lg overflow-hidden relative flex-shrink-0">
+        <div className="w-10 h-10 bg-white/5 rounded-[12px] overflow-hidden relative flex-shrink-0">
           <motion.div
             variants={shimmerVariants}
             animate="animate"
@@ -135,7 +135,7 @@ export function TableRowSkeleton() {
           />
         </div>
         <div className="w-full space-y-2">
-          <div className="w-3/4 h-4 bg-white/5 rounded overflow-hidden relative">
+          <div className="w-3/4 h-4 bg-white/5 rounded-[12px] overflow-hidden relative">
             <motion.div
               variants={shimmerVariants}
               animate="animate"
@@ -148,7 +148,7 @@ export function TableRowSkeleton() {
               }}
             />
           </div>
-          <div className="w-1/2 h-3 bg-white/5 rounded overflow-hidden relative">
+          <div className="w-1/2 h-3 bg-white/5 rounded-[12px] overflow-hidden relative">
             <motion.div
               variants={shimmerVariants}
               animate="animate"
@@ -163,7 +163,7 @@ export function TableRowSkeleton() {
           </div>
         </div>
       </div>
-      <div className="w-1/4 h-4 bg-white/5 rounded overflow-hidden relative">
+      <div className="w-1/4 h-4 bg-white/5 rounded-[12px] overflow-hidden relative">
         <motion.div
           variants={shimmerVariants}
           animate="animate"

@@ -116,9 +116,28 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('role');
   };
 
+  const googleLogin = async (credential) => {
+    setLoading(true);
+    try {
+      const res = await API.post(`/google?token=${credential}`);
+      if (res.data.refresh_token) {
+        localStorage.setItem('refresh_token', res.data.refresh_token);
+      }
+      setToken(res.data.access_token);
+      return { success: true };
+    } catch (err) {
+      return {
+        success: false,
+        error: err.response?.data?.detail || 'Google sign-in failed',
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ token, user, role, isLoggedIn, isAdmin, loading, login, verifyOtp, signup, logout }}
+      value={{ token, user, role, isLoggedIn, isAdmin, loading, login, verifyOtp, signup, logout, googleLogin }}
     >
       {children}
     </AuthContext.Provider>

@@ -24,7 +24,7 @@ def addaddress(address:AddressSchema,db:Session = Depends(get_db),user:int = Dep
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     data = AddresModel(
-        user_id = user,
+        user_id = user.id,
         name = address.name,
         street = address.street,
         city = address.city,

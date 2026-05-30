@@ -44,16 +44,16 @@ export default function VerifyEmail() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 relative">
       {/* Background glow orb */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-brand-neon/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-brand-accent/10 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="w-full max-w-md glass-card rounded-3xl p-8 relative z-10 text-center space-y-6">
+      <div className="w-full max-w-md ios-glass rounded-[28px] p-8 relative z-10 text-center space-y-6">
         {status === 'verifying' && (
           <div className="space-y-6 py-8">
             <div className="flex justify-center">
-              <FiLoader className="w-16 h-16 text-brand-neon animate-spin" />
+              <FiLoader className="w-16 h-16 text-brand-accent animate-spin" />
             </div>
             <div className="space-y-2">
-              <span className="text-[10px] font-black text-brand-neon tracking-widest uppercase animate-pulse">
+              <span className="text-[10px] font-black text-brand-accent tracking-widest uppercase animate-pulse">
                 Verification in Progress
               </span>
               <h2 className="text-2xl font-black text-white tracking-tight uppercase">
@@ -69,12 +69,12 @@ export default function VerifyEmail() {
         {status === 'success' && (
           <div className="space-y-6 py-6">
             <div className="flex justify-center">
-              <div className="w-20 h-20 bg-brand-neon/10 rounded-full border border-brand-neon/20 flex items-center justify-center animate-bounce">
-                <FiCheckCircle className="w-10 h-10 text-brand-neon" />
+              <div className="w-20 h-20 bg-brand-accent/10 rounded-full border border-brand-accent/20 flex items-center justify-center animate-bounce">
+                <FiCheckCircle className="w-10 h-10 text-brand-accent" />
               </div>
             </div>
             <div className="space-y-2">
-              <span className="text-[10px] font-black text-brand-neon tracking-widest uppercase">
+              <span className="text-[10px] font-black text-brand-accent tracking-widest uppercase">
                 Access Granted
               </span>
               <h2 className="text-3xl font-black text-white tracking-tight uppercase text-gradient">
@@ -87,7 +87,7 @@ export default function VerifyEmail() {
 
             <button
               onClick={() => navigate('/login')}
-              className="w-full flex items-center justify-center gap-2 py-3.5 mt-6 bg-brand-neon text-black font-extrabold text-xs tracking-widest uppercase rounded-full hover:scale-[1.01] active:scale-[0.99] transition duration-200 cursor-pointer shadow-lg shadow-brand-neon/10"
+              className="bg-brand-accent text-black min-h-[44px] rounded-full font-extrabold w-full flex items-center justify-center gap-2 mt-6 text-xs tracking-widest uppercase hover:scale-[1.01] active:scale-[0.99] transition duration-200 cursor-pointer focus:ring-2 focus:ring-brand-accent focus:outline-none shadow-lg shadow-brand-accent/10"
             >
               Sign In to Your Account <FiArrowRight className="w-4 h-4" />
             </button>

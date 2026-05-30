@@ -1,4 +1,44 @@
 {
     "python-envs.defaultEnvManager": "ms-python.python:venv",
-    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe"
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+    
+    // Pylance - Ultra-fast language support, auto-imports, and error diagnostics
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.variableTypes": true,
+    
+    // Python formatting, linting, and auto-fixing on save using Ruff
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always",
+            "source.fixAll.ruff": "always"
+        }
+    },
+    
+    // Clean up VS Code file explorer by nesting compiled Python files and cache
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "*.py": "${capture}.pyc, ${capture}.py.association, ${capture}.class",
+        "requirements.txt": "requirements*.txt, requirements*.pip, requirments*.txt, .venv"
+    },
+    
+    // Exclude cache and system files from search and watch patterns to boost speed
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/__pycache__": true,
+        "**/*.pyc": true
+    },
+    "search.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.venv": true,
+        "**/.git": true
+    },
+    "javascript.autoClosingTags": false
 }

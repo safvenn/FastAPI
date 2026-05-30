@@ -2,12 +2,13 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { pageTransition } from '../lib/motion';
 
 export default function MainLayout() {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col min-h-screen bg-brand-bg text-neutral-200 selection:bg-brand-neon selection:text-black">
+    <div className="flex flex-col min-h-screen bg-brand-bg text-neutral-200 selection:bg-brand-accent selection:text-white">
       {/* Sticky Navbar */}
       <Navbar />
 
@@ -16,10 +17,10 @@ export default function MainLayout() {
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.18, ease: 'easeOut' }}
+            initial={pageTransition.initial}
+            animate={pageTransition.animate}
+            exit={pageTransition.exit}
+            transition={pageTransition.transition}
             style={{ willChange: 'transform, opacity' }}
             className="w-full h-full"
           >

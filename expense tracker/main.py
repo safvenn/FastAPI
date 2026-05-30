@@ -1,7 +1,9 @@
+from api.ollamaai import chat_with_ollama
+from datetime import datetime
 from typing import List
-
 from fastapi import Depends, FastAPI,Response,HTTPException,responses,status
 from fastapi.security import OAuth2PasswordRequestForm,OAuth2PasswordRequestFormStrict
+from api.aiservice import get_ai_response
 from models import Expenses, Users
 from schemas import AddExp,Signup,Login, SignupResponse,TotalResponse,Expresponse
 from auth import create_token,verify_tokken,hashpass,verifypass
@@ -67,10 +69,10 @@ def login(form_data:Login,db: Session = Depends(get_db)):
     }
 
 
-@app.get("/{username}",response_model=TotalResponse,status_code=status.HTTP_200_OK)
-def total_exp(username: str, email: str = Depends(verify_tokken),db: Session = Depends(get_db)):
+@app.get("/userexpenses",response_model=TotalResponse,status_code=status.HTTP_200_OK)
+def total_exp(email: str = Depends(verify_tokken),db: Session = Depends(get_db)):
     
-    data = db.query(Expenses).filter(email == Expenses.user_email).order_by(Expenses.id.desc()).all()
+    data = db.query(Expenses).filter(email == Expenses.user_email).order_by(Expenses.created_at.desc()).all()
     datax = db.query(Users).filter(email == Users.email).first()
     return {
         "username":datax.username,
@@ -86,7 +88,9 @@ def add(data:AddExp,db: Session = Depends(get_db),email:str = Depends(verify_tok
         amount = data.amount,
         category = data.category,
         user_email = email,
-        discription = data.discription
+        discription = data.discription,
+        created_at = datetime.now(),
+        updated_at = datetime.now()
     )
 
 
@@ -117,3 +121,71 @@ def dele(i:int ,db:Session = Depends(get_db),email:str = Depends(verify_tokken))
     db.commit()
 
     return {"message": "Expense deleted successfully"}
+
+
+@app.post("/chat")
+async def aichat(chat:str,db: Session = Depends(get_db),email:str = Depends(verify_tokken)):
+    
+    data = db.query(Expenses).filter(email == Expenses.user_email).order_by(Expenses.created_at.desc()).all()
+    
+    # Serialize expense data to make it readable for the AI
+    expenses_list = [
+        {
+            "title": exp.title,
+            "amount": exp.amount,
+            "category": exp.category,
+            "description": exp.discription,
+            "date": exp.created_at.strftime("%Y-%m-%d") if exp.created_at else "Unknown"
+        }
+        for exp in data
+    ]
+    
+    prompt = f"""
+You are a realistic, direct, and highly punchy , friendly financial assistant. Your goal is to help the user manage their expenses and save money.
+
+Guidelines:
+1. Give extremely concise, direct, and short answers (1-2 sentences maximum).
+2. Avoid generic pleasantries, fluff, or filler words. Be punchy and get straight to the point.
+3. Be realistic and practical in your saving tips.
+4. Analyze the user's provided expense data to make your advice specific and factual.
+
+User's Expense Data:
+{expenses_list}
+
+User Message: {chat}
+"""
+    response = get_ai_response(prompt)
+    return {"response": response}
+
+@app.post("/olama")
+
+async def olama(chat:str,db:Session = Depends(get_db),email:str = Depends(verify_tokken)):
+    data = db.query(Expenses).filter(email == Expenses.user_email).order_by(Expenses.created_at.desc()).all()
+    expenses_list = [
+        {
+            "title": exp.title,
+            "amount": exp.amount,
+            "category": exp.category,
+            "description": exp.discription,
+            "date": exp.created_at.strftime("%Y-%m-%d") if exp.created_at else "Unknown"
+        }
+        for exp in data
+    ]
+
+    prompt = f"""
+You are a realistic, direct, and highly punchy,friendly financial assistant. Your goal is to help the user manage their expenses and save money.
+
+Guidelines:
+1. Give extremely concise, direct, and short answers (1-2 sentences maximum).
+2. Avoid generic pleasantries, fluff, or filler words. Be punchy and get straight to the point.
+3. Be realistic and practical in your saving tips.
+4. Analyze the user's provided expense data to make your advice specific and factual.
+
+User's Expense Data:
+{expenses_list}
+user_message = {chat}
+"""
+    response = await chat_with_ollama(prompt)
+    return {
+        "response":response
+    }

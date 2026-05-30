@@ -12,6 +12,8 @@ from users.models.usermodel import UsersModel
 from auth.password import hashpass, verify_pass
 from auth.eamil_auth import craete_email_token
 from auth.email import send_email_verf, send_otp, send_forgotpassword_email
+from auth.googleauth import verify_google_token
+import uuid
 
 router = APIRouter()
 
@@ -106,7 +108,7 @@ async def login(login: OAuth2PasswordRequestForm = Depends(), db: Session = Depe
         "token_type":'Bearer'
     }
 
-@router.post("/verify-otp")
+@router.post("/verify-otp",status_code=200)
 def verify_otp(otp: int, token: str, db: Session = Depends(get_db)):
     try:
         # Decode the client's temporary token to read the correct OTP and user ID
@@ -136,14 +138,14 @@ def verify_otp(otp: int, token: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid or expired session token")
 
 
-@router.post("/forgotpassword")
+@router.post("/forgotpassword",status_code=200)
 async def forgotpas(email:str):
     token = craete_email_token(email)
     await send_forgotpassword_email(email,token)
     return{
         "msg":"sended"
     }
-@router.put("/resetpassword/{token}")
+@router.put("/resetpassword/{token}",status_code=201)
 def reset(token: str, new_password: str, confirm_pass: str, db: Session = Depends(get_db)):
     if new_password != confirm_pass:
         raise HTTPException(status_code=400, detail="passwords do not match")
@@ -163,7 +165,7 @@ def reset(token: str, new_password: str, confirm_pass: str, db: Session = Depend
 
 #refresh token---------------------------------------------------------------------------------------------------------
 
-@router.post("/refresh")
+@router.post("/refresh",status_code=200)
 def refresh(token:str):
 
     new_token = verfy_refresh(token)
@@ -172,3 +174,35 @@ def refresh(token:str):
             "access_token": new_token,
             "token_type": "Bearer"
         }
+
+
+
+@router.post("/google",status_code=201)
+def google(token: str, db: Session = Depends(get_db)):
+    user_data = verify_google_token(token)
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Invalid Google token")
+
+    emailx = user_data["email"]
+    name = user_data.get("name", emailx.split("@")[0])
+
+    user = db.query(UsersModel).filter(UsersModel.email == emailx).first()
+    if not user:
+        data = UsersModel(
+            email=emailx,
+            username=name,
+            password=hashpass(str(uuid.uuid4())),
+            is_verify=True
+        )
+        db.add(data)
+        db.commit()
+        user = db.query(UsersModel).filter(UsersModel.email == emailx).first()
+
+    access_token = create_token({"sub": str(user.id)})
+    refresh_token = create_refresh_token({"sub": str(user.id)})
+
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "Bearer"
+    }

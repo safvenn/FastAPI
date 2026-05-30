@@ -86,6 +86,14 @@ def addtocart(add:AddtoCart,db:Session = Depends(get_db),user:int = Depends(curr
         size = add.size
 
     )
+    product = db.query(CartitemModel).filter(CartitemModel.user_id == user,CartitemModel.product_id == add.product_id,CartitemModel.size == add.size).first()
+    if product:
+        product.quantity += add.quantity
+        db.commit()
+        return {
+            "msg":"Item already exists in cart. Quantity updated."
+        }
+        
     db.add(data)
     db.commit()
     db.refresh(data)

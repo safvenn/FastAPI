@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FiUser, FiLock, FiArrowRight, FiKey, FiArrowLeft } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
+const GOOGLE_CLIENT_ID = '420901561899-edot1hm4db0pp3v7rgm8u87qnv3leurl.apps.googleusercontent.com';
+
 export default function Login() {
-  const { login, verifyOtp, isLoggedIn, loading } = useAuth();
+  const { login, verifyOtp, googleLogin, isLoggedIn, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -14,6 +16,17 @@ export default function Login() {
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState('');
   const [tempToken, setTempToken] = useState('');
+  const googleBtnRef = useRef(null);
+
+  // Google credential callback
+  const handleGoogleResponse = useCallback(async (response) => {
+    const res = await googleLogin(response.credential);
+    if (res.success) {
+      toast.success('Signed in with Google!');
+    } else {
+      toast.error(res.error || 'Google sign-in failed');
+    }
+  }, [googleLogin]);
 
   // Auto redirect if already logged in
   useEffect(() => {
@@ -22,6 +35,38 @@ export default function Login() {
       navigate(from, { replace: true });
     }
   }, [isLoggedIn]);
+
+  // Initialize Google Sign-In button
+  useEffect(() => {
+    if (isLoggedIn || showOtp) return;
+    const initGoogle = () => {
+      if (window.google?.accounts?.id && googleBtnRef.current) {
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleResponse,
+        });
+        window.google.accounts.id.renderButton(googleBtnRef.current, {
+          theme: 'filled_black',
+          size: 'large',
+          width: googleBtnRef.current.offsetWidth,
+          shape: 'pill',
+          text: 'signin_with',
+        });
+      }
+    };
+    // GSI script may load after component mount
+    if (window.google?.accounts?.id) {
+      initGoogle();
+    } else {
+      const timer = setInterval(() => {
+        if (window.google?.accounts?.id) {
+          clearInterval(timer);
+          initGoogle();
+        }
+      }, 100);
+      return () => clearInterval(timer);
+    }
+  }, [isLoggedIn, showOtp, handleGoogleResponse]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,9 +106,9 @@ export default function Login() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 relative">
       
       {/* Background glow orb */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-brand-neon/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-brand-accent/10 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="w-full max-w-md glass-card rounded-3xl p-8 relative z-10 text-left space-y-6">
+      <div className="w-full max-w-md ios-glass rounded-[28px] p-8 relative z-10 text-left space-y-6">
         
         {/* Optional back button when in OTP mode */}
         {showOtp && (
@@ -73,7 +118,7 @@ export default function Login() {
                 setShowOtp(false);
                 setOtp('');
               }}
-              className="flex items-center gap-1.5 text-[10px] font-bold text-neutral-400 hover:text-brand-neon transition uppercase tracking-widest cursor-pointer"
+              className="flex items-center gap-1.5 text-[10px] font-bold text-neutral-400 hover:text-brand-accent transition uppercase tracking-widest cursor-pointer"
             >
               <FiArrowLeft className="w-3.5 h-3.5" /> Back to Credentials
             </button>
@@ -82,7 +127,7 @@ export default function Login() {
 
         {/* Title details */}
         <div className="text-center space-y-2">
-          <span className="text-[10px] font-black text-brand-neon tracking-widest uppercase">
+          <span className="text-[10px] font-black text-brand-accent tracking-widest uppercase">
             {showOtp ? 'SECURE TWO-FACTOR' : 'AUTHENTIC ACCESS'}
           </span>
           <h2 className="text-3xl font-black text-white tracking-tight uppercase">
@@ -116,7 +161,7 @@ export default function Login() {
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Enter username or email"
                     required
-                    className="w-full pl-10 pr-4 py-3 bg-brand-surface border border-white/10 rounded-xl text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-brand-neon transition"
+                    className="bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none w-full px-4 py-3 pl-10 text-sm"
                   />
                 </div>
               </div>
@@ -127,7 +172,7 @@ export default function Login() {
                   <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
                     Password
                   </label>
-                  <Link to="/forgot-password" className="text-[9px] text-brand-neon hover:underline font-bold tracking-wider uppercase">
+                  <Link to="/forgot-password" className="text-[9px] text-brand-accent hover:underline font-bold tracking-wider uppercase">
                     Forgot?
                   </Link>
                 </div>
@@ -142,7 +187,7 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     required
-                    className="w-full pl-10 pr-4 py-3 bg-brand-surface border border-white/10 rounded-xl text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-brand-neon transition"
+                    className="bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none w-full px-4 py-3 pl-10 text-sm"
                   />
                 </div>
               </div>
@@ -165,7 +210,7 @@ export default function Login() {
                   placeholder="Enter 6-digit OTP"
                   maxLength={6}
                   required
-                  className="w-full pl-10 pr-4 py-3 bg-brand-surface border border-white/10 rounded-xl text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-brand-neon transition tracking-[0.25em] font-mono text-center"
+                  className="bg-white/5 border border-white/10 rounded-[12px] text-white placeholder:text-neutral-500 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent focus:outline-none w-full px-4 py-3 pl-10 text-sm tracking-[0.25em] font-mono text-center"
                 />
               </div>
             </div>
@@ -175,7 +220,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 py-3.5 mt-6 bg-brand-neon text-black font-extrabold text-xs tracking-widest uppercase rounded-full hover:scale-[1.01] active:scale-[0.99] transition duration-200 cursor-pointer shadow-lg shadow-brand-neon/10"
+            className="bg-brand-accent text-black min-h-[44px] rounded-full font-extrabold w-full flex items-center justify-center gap-2 mt-6 text-xs tracking-widest uppercase hover:scale-[1.01] active:scale-[0.99] transition duration-200 cursor-pointer focus:ring-2 focus:ring-brand-accent focus:outline-none shadow-lg shadow-brand-accent/10"
           >
             {loading 
               ? (showOtp ? 'Verifying...' : 'Authenticating...') 
@@ -184,10 +229,22 @@ export default function Login() {
 
         </form>
 
+        {/* Google Sign-In divider + button */}
+        {!showOtp && (
+          <div className="space-y-4 pt-1">
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-white/10" />
+              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">or</span>
+              <div className="flex-1 h-px bg-white/10" />
+            </div>
+            <div ref={googleBtnRef} className="w-full flex justify-center [&>div]:!w-full" />
+          </div>
+        )}
+
         {/* Footer signups link */}
         <div className="text-center pt-2 text-xs text-neutral-400">
           New to KICKS?{' '}
-          <Link to="/signup" className="text-brand-neon font-bold hover:underline">
+          <Link to="/signup" className="text-brand-accent font-bold hover:underline">
             Create an Account
           </Link>
         </div>

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { Toaster } from 'react-hot-toast';
@@ -22,6 +23,7 @@ import Admin from './pages/Admin';
 
 export default function App() {
   return (
+    <MotionConfig reducedMotion="user">
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
@@ -30,18 +32,18 @@ export default function App() {
             toastOptions={{
               duration: 3000,
               style: {
-                background: 'rgba(20, 20, 20, 0.9)',
+                background: 'rgba(20,20,20,0.9)',
                 color: '#e5e5e5',
-                border: '1px solid rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(10,132,255,0.2)',
                 borderRadius: '16px',
-                backdropFilter: 'blur(20px)',
+                backdropFilter: 'blur(16px)',
                 fontSize: '0.8rem',
                 fontWeight: '600',
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
               },
               success: {
-                iconTheme: { primary: '#39ff14', secondary: '#000' },
+                iconTheme: { primary: '#0A84FF', secondary: '#000' },
               },
               error: {
                 iconTheme: { primary: '#ef4444', secondary: '#fff' },
@@ -112,5 +114,6 @@ export default function App() {
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>
+    </MotionConfig>
   );
 }

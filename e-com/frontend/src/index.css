@@ -5,9 +5,31 @@
   --color-brand-surface: #141414;
   --color-brand-surface-card: #1f1f1f;
   --color-brand-surface-hover: #262626;
-  --color-brand-neon: #39ff14;
-  --color-brand-neon-dim: rgba(57, 255, 20, 0.15);
+  --color-brand-accent-primary: #0A84FF;
+  --color-brand-accent-primary-dim: rgba(10, 132, 255, 0.15);
   --color-brand-muted: #737373;
+
+  /* Electric blue accent */
+  --color-brand-accent: #0A84FF;
+  --color-brand-accent-dim: rgba(10, 132, 255, 0.15);
+  --color-brand-accent-glow: rgba(10, 132, 255, 0.25);
+
+  /* iOS border radii */
+  --radius-ios-sm: 12px;
+  --radius-ios-md: 20px;
+  --radius-ios-lg: 28px;
+  --radius-ios-xl: 36px;
+
+  /* Glass shadows */
+  --shadow-glass-sm: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-glass-md: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-glass-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+
+  /* Motion tokens */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --ease-ios: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @utility glass-card {
@@ -23,11 +45,11 @@
 }
 
 @utility neon-glow {
-  box-shadow: 0 0 20px rgba(57, 255, 20, 0.25);
+  box-shadow: 0 0 20px rgba(10, 132, 255, 0.25);
 }
 
 @utility neon-text {
-  text-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
+  text-shadow: 0 0 8px rgba(10, 132, 255, 0.4);
 }
 
 @utility ios-glass {
@@ -53,7 +75,36 @@
 }
 
 @utility ios-glow {
-  box-shadow: 0 0 40px rgba(57, 255, 20, 0.12);
+  box-shadow: 0 0 40px rgba(10, 132, 255, 0.12);
+}
+
+/* backdrop-filter fallback for unsupported browsers */
+@supports not (backdrop-filter: blur(1px)) {
+
+  .ios-glass,
+  .ios-glass-heavy,
+  .glass-card,
+  .glass-nav {
+    background-color: #1a1a1a;
+  }
+}
+
+@utility accent-glow {
+  box-shadow: 0 0 24px rgba(10, 132, 255, 0.3), 0 0 48px rgba(10, 132, 255, 0.1);
+}
+
+@utility accent-text {
+  text-shadow: 0 0 10px rgba(10, 132, 255, 0.5);
+}
+
+@utility accent-border {
+  border-color: rgba(10, 132, 255, 0.4);
+}
+
+.text-gradient-blue {
+  background: linear-gradient(135deg, #ffffff 0%, #0A84FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Custom scrollbars */
@@ -61,19 +112,23 @@
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: #0a0a0a;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #262626;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #39ff14;
+  background: #0A84FF;
 }
 
 /* Global body styling */
-html, body {
+html,
+body {
   background-color: #0a0a0a;
   color: #e5e5e5;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -89,50 +144,113 @@ html, body {
 
 /* Infinite marquee scroll for brand banners */
 @keyframes marquee-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
+
 .marquee-track {
   display: flex;
   width: max-content;
   animation: marquee-scroll 25s linear infinite;
 }
+
 .marquee-track:hover {
   animation-play-state: paused;
 }
 
 /* Subtle float for hero image */
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(-5deg); }
-  50% { transform: translateY(-14px) rotate(-3deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(-5deg);
+  }
+
+  50% {
+    transform: translateY(-14px) rotate(-3deg);
+  }
 }
+
 .animate-float {
   animation: float 5s ease-in-out infinite;
 }
 
 /* Carousel fade-in for product slides */
 @keyframes fade-slide-in {
-  0% { opacity: 0; transform: translateX(30px); }
-  100% { opacity: 1; transform: translateX(0); }
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
+
 .animate-fade-slide {
   animation: fade-slide-in 0.5s ease-out forwards;
 }
 
 /* Dot pulse for carousel indicators */
 @keyframes dot-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.35); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.35);
+  }
 }
+
 .dot-active {
   animation: dot-pulse 1.5s ease-in-out infinite;
 }
 
 /* Progress bar fill for auto-slide timer */
 @keyframes progress-fill {
-  0% { width: 0%; }
-  100% { width: 100%; }
+  0% {
+    width: 0%;
+  }
+
+  100% {
+    width: 100%;
+  }
 }
+
 .progress-bar-fill {
   animation: progress-fill var(--slide-duration, 4s) linear forwards;
+}
+
+/* Reduced motion: neutralize all animations and transitions */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Reduced motion: pause specific animated elements */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+
+  .animate-float {
+    animation: none;
+  }
+
+  .progress-bar-fill {
+    animation: none;
+  }
 }

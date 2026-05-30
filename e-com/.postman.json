@@ -1,0 +1,47 @@
+{
+  "version": "0.1",
+  "project": {
+    "name": "E-Commerce API",
+    "baseUrl": "http://localhost:8000",
+    "description": "FastAPI e-commerce backend — products, cart, orders, auth, users, admin"
+  },
+  "default": {
+    "workspace": "ecommerce",
+    "collection": "ecommerce-api",
+    "environment": "local"
+  },
+  "workspaces": {
+    "ecommerce": {
+      "id": "225a4aa8-72a1-4f42-b2dd-bd2a1cb99af2",
+      "name": "E-Commerce API",
+      "type": "personal",
+      "createdAt": "2026-05-30"
+    }
+  },
+  "collections": {
+    "ecommerce-api": {
+      "id": "43d6b594-3942-4541-aded-1a8f51651710",
+      "uid": "44984745-43d6b594-3942-4541-aded-1a8f51651710",
+      "name": "E-Commerce API",
+      "workspace": "ecommerce",
+      "description": "Full test suite — Auth, Products, Cart, Orders, Profile, Address, Admin",
+      "requestCount": 24,
+      "createdAt": "2026-05-30"
+    }
+  },
+  "environments": {
+    "local": {
+      "id": "5e8b40cd-0a3c-4f6f-af49-b4e9fcbf7b1c",
+      "uid": "44984745-5e8b40cd-0a3c-4f6f-af49-b4e9fcbf7b1c",
+      "name": "Local Development",
+      "workspace": "ecommerce",
+      "variables": {
+        "API_URL": "http://localhost:8000",
+        "AUTH_TOKEN": "(set automatically after verify-otp)",
+        "REFRESH_TOKEN": "(set automatically after verify-otp)",
+        "OTP_TOKEN": "(set automatically after login)"
+      },
+      "createdAt": "2026-05-30"
+    }
+  }
+}

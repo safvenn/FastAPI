@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiPlus, FiArrowRight } from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
 import SizeSelector from './SizeSelector';
 import { useCart } from '../context/CartContext';
+import { formatPrice } from '../lib/ticker';
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
@@ -37,31 +38,30 @@ export default function ProductCard({ product }) {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-20px' }}
-        transition={{ duration: 0.4 }}
-        className="group relative ios-glass rounded-[24px] overflow-hidden flex flex-col justify-between hover:scale-[1.02] hover:border-brand-neon/25 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-all duration-300"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ duration: 0.15 }}
+        className="group ios-glass rounded-[20px] overflow-hidden flex flex-col"
       >
-        <Link to={`/product/${product.id}`} className="block">
-          
-          {/* Card Image Wrapper with hover zoom and premium blur layer */}
-          <div className="relative aspect-square w-full bg-transparent flex items-center justify-center p-0 overflow-hidden">
-            <motion.img
+        <Link
+          to={`/product/${product.id}`}
+          className="block focus:outline-none focus:ring-2 focus:ring-brand-accent"
+        >
+          {/* Image area */}
+          <div className="relative aspect-square w-full bg-black/20 overflow-hidden">
+            <img
               src={product.image_url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff'}
-              alt={product.title}
+              alt={product.name || product.title || 'Sneaker'}
               loading="lazy"
               decoding="async"
-              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-out"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            {/* Dark gradient shadow bottom */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-            
-            {/* Quick action buttons overlay */}
-            <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+
+            {/* Quick-add button overlay — top-right, visible on hover */}
+            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <button
                 onClick={handleQuickAdd}
-                className="w-10 h-10 rounded-full bg-brand-neon hover:bg-brand-neon hover:scale-105 text-black flex items-center justify-center shadow-lg transition duration-200 cursor-pointer"
+                className="bg-brand-accent text-black rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition focus:outline-none focus:ring-2 focus:ring-brand-accent"
                 title="Quick Add to Cart"
               >
                 <FiPlus className="w-5 h-5 font-black" />
@@ -69,52 +69,56 @@ export default function ProductCard({ product }) {
             </div>
           </div>
 
-          {/* Product description details */}
-          <div className="p-5 flex-grow flex flex-col justify-between">
-            <div>
-              {/* Brand Tag */}
-              <span className="text-[10px] font-extrabold tracking-widest text-brand-neon uppercase px-2 py-0.5 bg-brand-neon/10 rounded-md">
-                {product.brand || 'Sneakers'}
-              </span>
-              
-              {/* Product Title */}
-              <h3 className="mt-3 text-sm font-semibold text-white tracking-tight line-clamp-1 group-hover:text-brand-neon transition-colors duration-200">
-                {product.title}
-              </h3>
+          {/* Card body */}
+          <div className="p-4 flex flex-col gap-2">
+            {/* Brand eyebrow */}
+            <span className="text-[10px] font-black tracking-widest text-brand-accent uppercase">
+              {product.brand || 'Sneakers'}
+            </span>
 
-              {/* Sneaker sizes preview pills */}
-              {sizes.length > 0 && (
-                <div className="flex gap-1 mt-2.5 flex-wrap overflow-hidden h-5">
-                  {sizes.slice(0, 4).map((sz, idx) => (
-                    <span key={idx} className="text-[9px] text-neutral-400 bg-white/5 border border-white/5 px-1.5 py-0.5 rounded">
-                      US {sz}
-                    </span>
-                  ))}
-                  {sizes.length > 4 && (
-                    <span className="text-[9px] text-neutral-500 px-1 py-0.5">
-                      +{sizes.length - 4}
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
+            {/* Product name */}
+            <h3 className="text-sm font-bold text-white line-clamp-2">
+              {product.name || product.title}
+            </h3>
 
-            {/* Price section and Detail navigation icon */}
-            <div className="mt-5 flex items-center justify-between">
-              <span className="text-base font-extrabold text-white">
-                ${product.price || '180'}
-              </span>
-              <span className="flex items-center gap-1 text-[10px] font-bold text-brand-neon opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                VIEW DETAIL <FiArrowRight className="w-3 h-3" />
+            {/* Market stats row */}
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col">
+                <span className="text-[9px] text-neutral-500 uppercase tracking-wider">Last Sale</span>
+                <span className="text-base font-black text-white">
+                  {formatPrice(typeof product.price === 'number' ? product.price : parseFloat(product.price) || 0)}
+                </span>
+              </div>
+
+              {/* Movement chip — static visual indicator */}
+              <span className="text-emerald-400 bg-emerald-400/10 rounded-full px-2 py-0.5 text-[10px] font-bold">
+                +2.1%
               </span>
             </div>
 
+            {/* Size pills row */}
+            {sizes.length > 0 && (
+              <div className="flex gap-1 flex-wrap overflow-hidden h-5">
+                {sizes.slice(0, 4).map((sz, idx) => (
+                  <span
+                    key={idx}
+                    className="text-[9px] text-neutral-400 bg-white/5 border border-white/5 px-1.5 py-0.5 rounded"
+                  >
+                    US {sz}
+                  </span>
+                ))}
+                {sizes.length > 4 && (
+                  <span className="text-[9px] text-neutral-500 px-1 py-0.5">
+                    +{sizes.length - 4}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
-
         </Link>
       </motion.div>
 
-      {/* Render the Size selector modal if user initiates quick add */}
+      {/* Size selector modal */}
       <SizeSelector
         isOpen={sizeSelectorOpen}
         onClose={() => setSizeSelectorOpen(false)}
