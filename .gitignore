@@ -64,3 +64,10 @@ frontend/.cache/
 .pytest_cache/
 .coverage
 htmlcov/
+
+
+#ai
+.claude
+.kiro
+.vscode
+.agent
