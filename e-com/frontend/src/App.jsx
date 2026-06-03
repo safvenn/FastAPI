@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 
 import ProtectedRoute from './routes/ProtectedRoute';
 import MainLayout from './layouts/MainLayout';
+import AiAgent from './components/AiAgent';
 
 import Home from './pages/Home';
 import Products from './pages/Products';
@@ -111,6 +112,9 @@ export default function App() {
 
             </Route>
           </Routes>
+
+          {/* AI Agent — Floating chatbot available on every page */}
+          <AiAgent />
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>

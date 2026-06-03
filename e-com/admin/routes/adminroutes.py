@@ -4,12 +4,12 @@ from users.models.usermodel import UsersModel
 from auth.auth import current_user
 from database.db import get_db
 from orders.models.ordermodels import OrderModel
-
-
+from admin.schemas.orderschemas import Ordesschemas
+from users.schemas.userschema import ProfileSchema
 router = APIRouter()
 
 
-@router.get("/users")
+@router.get("/users",response_model=list[ProfileSchema])
 def users(db: Session = Depends(get_db),user:str = Depends(current_user)):
     user_obj = db.query(UsersModel).filter(UsersModel.id == user).first()
     if user_obj and user_obj.role != "admin":
@@ -51,7 +51,7 @@ def deluser(id:int,db:Session = Depends(get_db),user:str = Depends(current_user)
     }
 
 
-@router.get("/admin/orders")
+@router.get("/admin/orders",response_model=list[Ordesschemas])  
 def admin_orders(db: Session = Depends(get_db), user: int = Depends(current_user)):
     user_obj = db.query(UsersModel).filter(UsersModel.id == user).first()
     if not user_obj or user_obj.role != "admin":

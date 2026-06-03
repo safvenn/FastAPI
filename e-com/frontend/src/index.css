@@ -229,6 +229,157 @@ body {
   animation: progress-fill var(--slide-duration, 4s) linear forwards;
 }
 
+/* ─── AI Agent Animations ─────────────────────────────────────── */
+
+/* Pulse ring on the floating trigger */
+@keyframes ai-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.animate-ai-pulse {
+  animation: ai-pulse 2.5s ease-out infinite;
+}
+
+/* Blinking cursor for AI typewriter */
+@keyframes ai-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-ai-cursor {
+  animation: ai-cursor-blink 0.8s ease-in-out infinite;
+}
+
+/* Custom scrollbar for AI chat panel */
+.ai-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ai-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+
+.ai-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(10, 132, 255, 0.4);
+}
+
+/* ─── AI Markdown Rendered Content ─────────────────────────────── */
+
+.ai-md-container {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.ai-md-h1 {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 12px 0 6px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ai-md-h2 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0A84FF;
+  letter-spacing: -0.01em;
+  margin: 10px 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ai-md-h3 {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #e5e5e5;
+  margin: 8px 0 4px 0;
+  padding-left: 8px;
+  border-left: 2px solid #0A84FF;
+}
+
+.ai-md-h4 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #d4d4d4;
+  margin: 6px 0 3px 0;
+}
+
+.ai-md-p {
+  margin: 3px 0;
+  line-height: 1.6;
+}
+
+.ai-md-ul {
+  margin: 4px 0;
+  padding-left: 12px;
+  list-style: none;
+}
+
+.ai-md-li {
+  position: relative;
+  padding-left: 14px;
+  margin: 3px 0;
+  line-height: 1.6;
+}
+
+.ai-md-li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: #0A84FF;
+  font-weight: 900;
+  font-size: 0.9em;
+}
+
+.ai-md-bold {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.ai-md-italic {
+  font-style: italic;
+  color: #a3a3a3;
+}
+
+.ai-md-code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.85em;
+  background: rgba(10, 132, 255, 0.1);
+  border: 1px solid rgba(10, 132, 255, 0.15);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: #0A84FF;
+}
+
+.ai-md-hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(10, 132, 255, 0.3), transparent);
+  margin: 10px 0;
+}
+
+.ai-md-spacer {
+  height: 6px;
+}
+
 /* Reduced motion: neutralize all animations and transitions */
 @media (prefers-reduced-motion: reduce) {
 
@@ -251,6 +402,14 @@ body {
   }
 
   .progress-bar-fill {
+    animation: none;
+  }
+
+  .animate-ai-pulse {
+    animation: none;
+  }
+
+  .animate-ai-cursor {
     animation: none;
   }
 }

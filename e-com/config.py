@@ -7,7 +7,7 @@ load_dotenv()
 DATABASE_URL = os.getenv("dbconnection")
 SECRET_KEY = os.getenv("SECRET_KEY")
 SECRET_KEY_REFRESH = os.getenv("REFRESH_SECRET_KEY")
-
+GEMINI_API_KEY=os.getenv("GEMINI_API_KEY")
 
 
 class Settings:

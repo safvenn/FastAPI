@@ -1,18 +1,13 @@
 from api.ollamaai import chat_with_ollama
 from datetime import datetime
-from typing import List
-from fastapi import Depends, FastAPI,Response,HTTPException,responses,status
-from fastapi.security import OAuth2PasswordRequestForm,OAuth2PasswordRequestFormStrict
+from fastapi import Depends, FastAPI,HTTPException,status
 from api.aiservice import get_ai_response
 from models import Expenses, Users
 from schemas import AddExp,Signup,Login, SignupResponse,TotalResponse,Expresponse
 from auth import create_token,verify_tokken,hashpass,verifypass
-from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from db import Base,enginne,get_db,sessionmaker
+from db import Base,enginne,get_db
 from sqlalchemy.orm import Session
-from starlette.middleware.base import BaseHTTPMiddleware
-import time
 from dotenv import load_dotenv
 load_dotenv()
 

@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowRight, FiShield, FiTrendingUp, FiCheckCircle, FiChevronLeft, FiChevronRight, FiZap, FiStar } from 'react-icons/fi';
+import { FiArrowRight, FiShield, FiTrendingUp, FiCheckCircle, FiChevronLeft, FiChevronRight, FiZap, FiStar, FiMessageCircle, FiCpu, FiUser } from 'react-icons/fi';
 import { useProducts } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
 import { ProductSkeleton } from '../components/LoadingSkeleton';
 import Hero from '../components/Hero';
+import { formatPrice } from '../lib/ticker';
 
 const SLIDE_DURATION = 4000; // 4 seconds per slide
 const BRAND_LIST = ['NIKE', 'JORDAN', 'ADIDAS', 'YEEZY', 'PUMA', 'NEW BALANCE', 'REEBOK', 'CONVERSE'];
@@ -294,6 +295,133 @@ export default function Home() {
             </div>
           )}
 
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          4.5. AI RECOMMENDATION SECTION — Showcase AI Agent
+          ══════════════════════════════════════════════════════════ */}
+      <section className="py-20 bg-brand-bg relative overflow-hidden">
+        {/* Background ambient effects */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-accent/8 rounded-full blur-[140px]" />
+          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/6 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+
+            {/* Left — Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center gap-2">
+                <FiZap className="w-4 h-4 text-brand-accent" />
+                <span className="text-xs font-black text-brand-accent tracking-widest uppercase">AI-Powered</span>
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tighter uppercase leading-[0.95]">
+                Your Personal<br />
+                <span className="text-gradient-blue">Shoe Expert.</span>
+              </h2>
+              <p className="text-sm text-neutral-400 leading-relaxed max-w-md">
+                Our AI knows every shoe in the store. Tell it your budget, style, or activity — and get instant expert recommendations with one-click product access.
+              </p>
+
+              {/* Feature pills */}
+              <div className="flex flex-wrap gap-2">
+                {['Budget-Aware', 'Brand Expert', 'Instant Picks', 'Click to Buy'].map((f) => (
+                  <span key={f} className="px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase bg-white/5 border border-white/10 rounded-full text-neutral-300">
+                    {f}
+                  </span>
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  const trigger = document.getElementById('ai-agent-trigger');
+                  if (trigger) trigger.click();
+                }}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-brand-accent to-purple-500 text-white font-extrabold text-xs tracking-widest uppercase rounded-full hover:shadow-[0_0_40px_rgba(10,132,255,0.35)] hover:scale-[1.03] transition-all duration-300 cursor-pointer"
+              >
+                <FiMessageCircle className="w-4 h-4" />
+                Ask AI Now
+                <FiArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </motion.div>
+
+            {/* Right — Mock chat preview */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="relative"
+            >
+              <div className="ios-glass ios-curve-lg p-6 space-y-4 relative overflow-hidden">
+                {/* Header accent */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-brand-accent via-purple-500 to-pink-500" />
+
+                {/* Chat preview lines */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                    <FiUser className="w-4 h-4 text-neutral-300" />
+                  </div>
+                  <div className="px-4 py-3 bg-brand-accent/10 border border-brand-accent/20 rounded-2xl rounded-tr-md text-[13px] text-white">
+                    Best shoes for running under $120?
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-accent to-purple-500 flex items-center justify-center flex-shrink-0 shadow-[0_0_12px_rgba(10,132,255,0.3)]">
+                    <FiCpu className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <div className="px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-2xl rounded-tl-md text-[13px] text-neutral-200 leading-relaxed">
+                      Great choice! Here are the top 3 running shoes within your budget...
+                    </div>
+
+                    {/* Mock product cards */}
+                    {products.slice(0, 2).map((product) => (
+                      <Link
+                        key={product.id}
+                        to={`/product/${product.id}`}
+                        className="group flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-brand-accent/40 hover:bg-brand-accent/[0.06] transition-all duration-300"
+                      >
+                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-black/30 flex-shrink-0">
+                          <img
+                            src={product.image_url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff'}
+                            alt={product.title || product.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-bold text-white truncate group-hover:text-brand-accent transition-colors">
+                            {product.title || product.name}
+                          </p>
+                          <span className="text-[10px] text-brand-accent font-black">
+                            {formatPrice(typeof product.price === 'number' ? product.price : parseFloat(product.price) || 0)}
+                          </span>
+                        </div>
+                        <FiArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-brand-accent group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Decorative gradient orb */}
+                <motion.div
+                  animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.35, 0.2] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute -bottom-16 -right-16 w-40 h-40 bg-purple-500/15 rounded-full blur-[60px] pointer-events-none"
+                />
+              </div>
+            </motion.div>
+
+          </div>
         </div>
       </section>
 
